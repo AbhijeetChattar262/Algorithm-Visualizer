@@ -14,7 +14,7 @@
 
 .hero{
     position: absolute;
-    background: linear-gradient(135deg, #1c0078, #000);
+    background: linear-gradient(135deg, #1c0078ad, #000000ad);
     padding: 80px;
     color: #fff;
     border-radius: 20px;
@@ -50,6 +50,7 @@
 
 .start{
     flex: 1;
+    color: #000;
 }
 
 .arrow{

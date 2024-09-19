@@ -1,0 +1,10 @@
+.auth-option{
+    padding: 10px 30px;
+    margin: 0 3vw 20px 3vw;
+    background: linear-gradient(90deg, #b5aaff57, #3533CD);
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
