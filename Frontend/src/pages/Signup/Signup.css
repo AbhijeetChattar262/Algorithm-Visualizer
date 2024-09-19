@@ -1,0 +1,24 @@
+*{
+    color: white;
+}
+
+.signup{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.signup h1{
+    font-size: 2rem;
+    margin: 20px 0;
+}
+
+.nav-btn{
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1rem;
+    text-decoration: underline;
+}
