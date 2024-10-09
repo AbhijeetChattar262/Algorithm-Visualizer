@@ -1,9 +1,11 @@
 .algo-container {
     background-color: black;
     padding: 5px;
+    display: flex;
 }
 
 .algo-hero {
     display: flex;
-
+    flex-direction: column;
+    width: 75%;
 }
