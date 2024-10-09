@@ -1,3 +1,45 @@
 .info-section {
-    background-color: black;
+    background-color: rgb(84, 83, 83);
+    display: flex;
+    height: 150px;
+    border-radius: 10px;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 400%;
+}
+
+.content {
+    color: #000;
+    min-width: 100%;
+    padding: 20px 70px;
+    box-sizing: border-box;
+}
+
+.prev,
+.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgb(23, 5, 125);
+    color: white;
+    border-radius: 25%;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.prev {
+    left: 10px;
+    z-index: 2;
+}
+
+.next {
+    right: 10px;
+    z-index: 2;
 }
