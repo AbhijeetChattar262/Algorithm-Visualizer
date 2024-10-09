@@ -6,8 +6,10 @@ import Main from '../../components/Categories/Main/Main'
 export default function Categories() {
     return (
         <Background>
-            <Heading />
-            <Main />
+            <div className="categories-wrapper">
+                <Heading />
+                <Main />
+            </div>
         </Background>
     )
 }

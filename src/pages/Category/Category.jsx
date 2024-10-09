@@ -1,16 +1,14 @@
 import React from 'react'
 import './Category.css'
-import { subCategories } from '../../constants'
+import List from '../../components/Category/List/List'
 import Background from '../../components/Background/Background'
+import Heading from '../../components/Heading/Heading'
 
 export default function Category({ subCategory }) {
     return (
         <Background>
-            <ul>
-                {subCategories[subCategory].map((sub, index) => (
-                    <li key={index}>{sub}</li>
-                ))}
-            </ul>
+            <Heading />
+            <List subCategory={subCategory} />
         </Background>
     )
 }

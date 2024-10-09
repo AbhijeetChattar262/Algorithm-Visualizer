@@ -22,15 +22,24 @@ export const algorithmCategories = [
 ];
 
 export const subCategories = {
-  Sorting: [
+  sorting_algorithms: [
     "Bubble Sort",
     "Insertion Sort",
     "Selection Sort",
     "Merge Sort",
     "Quick Sort",
   ],
-  Searching: ["Linear Search", "Binary Search"],
-  Graph: ["DFS", "BFS"],
-  Dynamic: ["Knapsack"],
-  Backtracking: ["Depth First Search", "Breadth First Search"],
+  searching_algorithms: ["Linear Search", "Binary Search"],
+  graph_algorithms: ["DFS", "BFS"],
+  dynamic_programming: ["Knapsack"],
+  backtracking_algorithms: ["Depth First Search", "Breadth First Search"],
+};
+
+export const infoSection = {
+  bubble_sort: {
+    info: "adv",
+    algorithm: "",
+    complexity: "",
+    use_cases: "",
+  },
 };

@@ -17,7 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/categories/:category" element={<CategoryWrapper />} />
-        <Route path="/categories/:category/:algorithm" element={<Algorithm />} />
+        <Route path="/categories/:category/:algorithm" element={<AlgorithmWrapper />} />
       </Routes>
     </BrowserRouter>
   );
@@ -26,6 +26,11 @@ function App() {
 function CategoryWrapper() {
   const { category } = useParams();
   return <Category subCategory={category} />;
+}
+
+function AlgorithmWrapper() {
+  const { algorithm } = useParams();
+  return <Algorithm algorithm={algorithm} />;
 }
 
 export default App;

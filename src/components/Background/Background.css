@@ -9,11 +9,13 @@
     width: 100vw;
     background-color: black;
     z-index: -1;
+    position: fixed;
+    overflow: auto;
 }
 
 .background::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     height: 100%;

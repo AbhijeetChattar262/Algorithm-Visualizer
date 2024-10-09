@@ -5,7 +5,7 @@
     margin: 20px;
     text-align: center;
     width: 220px;
-    background: linear-gradient(135deg, #1c0078ad, #000000ad);
+    background: linear-gradient(135deg, #1c0078ad, #494949ad);
     transition: transform 0.3s, box-shadow 0.3s;
 }
 

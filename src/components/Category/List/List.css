@@ -1,0 +1,30 @@
+.list-wrapper {
+    padding: 16px 40px;
+    background: linear-gradient(135deg, #1c0078ad, #494949ad);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 20px auto;
+    position: relative;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    padding: 20px;
+    margin: 20px;
+    font-size: 20px;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    border-radius: 8px;
+    text-align: center;
+}
+
+li:hover {
+    background-color: #8a49cb76;
+}
