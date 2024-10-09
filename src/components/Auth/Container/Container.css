@@ -1,8 +1,8 @@
-.container{
+.container {
     height: 75vh;
     width: 75vw;
     background: linear-gradient(135deg, #1c0078ad, #000000ad);
-    margin: 0 auto; 
+    margin: 0 auto;
     border-radius: 30px;
     border: 1px solid #857bdf;
 }
