@@ -1,11 +1,11 @@
 import React from 'react'
 import './Input.css'
 
-export default function Input({label, type}) {
+export default function Input({ label, type }) {
   return (
-    <div className="input">
+    <div className="auth-input-container">
       <label htmlFor={label}>{label}</label>
-      <input type={type} name={label} id={label} />   
+      <input className="auth-input" type={type} name={label} id={label} />
     </div>
   )
 }

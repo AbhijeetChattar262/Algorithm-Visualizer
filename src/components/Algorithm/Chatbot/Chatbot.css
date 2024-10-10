@@ -1,8 +1,85 @@
 .chatbot-container {
+    display: flex;
+    flex-direction: column;
     position: relative;
     width: 25%;
     height: calc(100vh - 10px);
-    background-color: aqua;
+    background-color: #42425e;
     border-radius: 10px;
+    padding: 10px;
     margin-left: 5px;
+}
+
+.chat-history {
+    position: relative;
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background-color: #e2e2e2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Space between chat bubbles */
+}
+
+/* Chat bubbles */
+.chat-bubble {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 10px;
+    max-width: 70%;
+    word-wrap: break-word;
+    /* Ensure long words wrap */
+}
+
+.chat-bubble.user {
+    align-self: flex-end;
+    /* Align user messages to the right */
+    background-color: #007bff;
+    color: white;
+}
+
+.chat-bubble.bot {
+    align-self: flex-start;
+    /* Align bot messages to the left */
+    background-color: #bb4444;
+    color: black;
+}
+
+/* Input and Send Button */
+.chat-input-container {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    color: #000;
+    font-size: 16px;
+    resize: none;
+    overflow-y: hidden;
+    height: 70px;
+}
+
+.chat-input:focus {
+    outline: none;
+    border: 1px solid #007bff;
+}
+
+.send-btn {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.send-btn:hover {
+    background-color: #0056b3;
 }
