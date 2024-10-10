@@ -7,11 +7,11 @@ import Chatbot from '../../components/Algorithm/Chatbot/Chatbot'
 export default function Algorithm({ algorithm }) {
     return (
         <div className="algo-container">
-            <InfoSection algorithm={algorithm} />
             <div className="algo-hero">
+                <InfoSection algorithm={algorithm} />
                 <Visualization algorithm={algorithm} />
-                <Chatbot />
             </div>
+            <Chatbot />
         </div>
     )
 }

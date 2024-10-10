@@ -21,16 +21,17 @@ export default function Signup() {
           <Input label="Username" type="text" />
           <Input label="Password" type="password" />
           <Divider text="Signup" />
-          <div className="auth-options"><AuthOptions
-            icon="fa-brands fa-google"
-            authType="Signup"
-            authOption="Google"
-          />
-          <AuthOptions
-            icon="fa-brands fa-github"
-            authType="Signup"
-            authOption="Github"
-          /></div>
+          <div className="auth-options">
+            <AuthOptions
+              icon="fa-brands fa-google"
+              authType="Signup"
+              authOption="Google"
+            />
+            <AuthOptions
+              icon="fa-brands fa-github"
+              authType="Signup"
+              authOption="Github"
+            /></div>
           <Button text="Signup" />
           <p>
             Already have an account?{" "}

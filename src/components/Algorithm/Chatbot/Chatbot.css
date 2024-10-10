@@ -1,9 +1,8 @@
 .chatbot-container {
     position: relative;
-    width: 400px;
-    height: calc(100vh - 165px);
+    width: 25%;
+    height: calc(100vh - 10px);
     background-color: aqua;
     border-radius: 10px;
-    margin-top: 5px;
     margin-left: 5px;
 }
