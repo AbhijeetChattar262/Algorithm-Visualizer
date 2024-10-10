@@ -52,7 +52,6 @@ export const infoSection = {
       "Average Case: O(n^2).",
       "Space Complexity: O(1) (in-place sorting, no extra memory used).",
       "Stable Sort: Bubble sort maintains the relative order of equal elements.",
-      "Adaptive: It can detect if the list is already sorted and stop early.",
     ],
     use_cases: [
       "For educational purposes, as it demonstrates basic sorting techniques.",
