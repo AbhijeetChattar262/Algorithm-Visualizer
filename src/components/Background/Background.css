@@ -7,7 +7,7 @@
 .background {
     height: 100vh;
     width: 100vw;
-    background-color: rgb(71, 71, 71);
+    background-color: rgb(57, 57, 57);
     z-index: -1;
     position: fixed;
     overflow: auto;

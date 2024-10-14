@@ -14,41 +14,42 @@
     position: relative;
     flex: 1;
     overflow-y: auto;
-    padding: 10px;
+    padding: 0 10px 10px 0;
     margin-bottom: 10px;
     border-radius: 10px;
-    background-color: #e2e2e2;
+    background-color: #42425e;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    /* Space between chat bubbles */
 }
 
 /* Chat bubbles */
 .chat-bubble {
     display: inline-block;
-    padding: 10px 15px;
+    padding: 10px 10px;
     border-radius: 10px;
-    max-width: 70%;
     word-wrap: break-word;
-    /* Ensure long words wrap */
 }
 
 .chat-bubble.user {
-    align-self: flex-end;
-    /* Align user messages to the right */
+    max-width: 80%;
+    align-self: flex-start;
     background-color: #007bff;
     color: white;
 }
 
 .chat-bubble.bot {
+    max-width: fit-content;
     align-self: flex-start;
-    /* Align bot messages to the left */
-    background-color: #bb4444;
+    background-color: #2e2e2e;
     color: black;
 }
 
-/* Input and Send Button */
+.chat-bubble.bot ul,
+ol {
+    margin-left: 15px;
+}
+
 .chat-input-container {
     display: flex;
     gap: 10px;
@@ -58,7 +59,7 @@
     flex: 1;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     color: #000;
     font-size: 16px;
     resize: none;
@@ -68,7 +69,7 @@
 
 .chat-input:focus {
     outline: none;
-    border: 1px solid #007bff;
+    border: 2px solid #007bff;
 }
 
 .send-btn {
@@ -78,6 +79,19 @@
     color: white;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.hljs {
+    background-color: #000000;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+    color: #aad1ff;
 }
 
 .send-btn:hover {

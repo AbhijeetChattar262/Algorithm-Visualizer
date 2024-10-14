@@ -1,11 +1,11 @@
 .card {
-    border: 1px solid #b3aaff;
+    border: 1px solid #b3aaff6e;
     border-radius: 12px;
     padding: 20px;
     margin: 20px;
     text-align: center;
     width: 220px;
-    background: linear-gradient(135deg, #1c0078ad, #494949ad);
+    background-color: #1c0078ad;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
