@@ -12,10 +12,10 @@ const md = new MarkdownIt({
             try {
                 return '<pre class="hljs"><code>' +
                     hljs.highlight(lang, str, true).value +
-                    '</code></pre>';
+                    `</code><button class="copy-btn">Copy to clipboard</button></pre>`;
             } catch (__) { }
         }
-        return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+        return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + `</code><button class="copy-btn">Copy to clipboard</button></pre>`;
     },
     breaks: true, // Convert newlines to <br> for line breaks in paragraphs
 });
@@ -82,6 +82,34 @@ export default function Chatbot() {
             chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
         }
     }, [chatHistory, prompt, currentWordIndex]); // Add prompt as a dependency
+
+    // Add event listeners for copy buttons in highlighted code blocks
+    useEffect(() => {
+        const copyButtons = document.getElementsByClassName("copy-btn");
+
+        Array.from(copyButtons).forEach((button) => {
+            button.addEventListener("click", handleCopyClick);
+        });
+
+        return () => {
+            Array.from(copyButtons).forEach((button) => {
+                button.removeEventListener("click", handleCopyClick);
+            });
+        };
+    }, [chatHistory]); // Re-run effect whenever chatHistory updates
+
+    const handleCopyClick = (event) => {
+        // Find the closest code block to the clicked button
+        const codeBlock = event.target.closest("pre").querySelector("code");
+
+        if (codeBlock) {
+            navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+                alert("Code copied to clipboard!");
+            }).catch((err) => {
+                console.error("Failed to copy: ", err);
+            });
+        }
+    };
 
     return (
         <div className="chatbot-container">
