@@ -1,144 +1,73 @@
 import React, { useState, useRef, useEffect } from "react";
-import MarkdownIt from "markdown-it";
-import hljs from "highlight.js"; // For syntax highlighting
-import "highlight.js/styles/github.css"; // Import the highlight.js theme
+import { ResizableBox } from "react-resizable"; 
+import ChatHistory from "./ChatHistory/ChatHistory";
+import ChatInput from "./ChatInput/ChatInput";
+import { addCopyButtonListeners } from "../../../utils/copy-to-clipboard.util";
+import { formatResponse } from "../../../utils/markdown.util";
 import { chatSession } from "../../../utils/gemini";
 import "./Chatbot.css";
-
-// Initialize markdown-it with syntax highlighting
-const md = new MarkdownIt({
-    highlight: function (str, lang) {
-        if (lang && hljs.getLanguage(lang)) {
-            try {
-                return '<pre class="hljs"><code>' +
-                    hljs.highlight(lang, str, true).value +
-                    `</code><button class="copy-btn">Copy to clipboard</button></pre>`;
-            } catch (__) { }
-        }
-        return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + `</code><button class="copy-btn">Copy to clipboard</button></pre>`;
-    },
-    breaks: true, // Convert newlines to <br> for line breaks in paragraphs
-});
+import "react-resizable/css/styles.css"; // Import default styles for react-resizable
 
 export default function Chatbot() {
     const [chatHistory, setChatHistory] = useState([{ message: "Hello! How can I help you today?", type: "bot" }]);
     const [input, setInput] = useState("");
-    const chatHistoryRef = useRef(null);
-    const [prompt, setPrompt] = useState(""); // Add a new state for the prompt
-    const [response, setResponse] = useState("");
-    const [currentWordIndex, setCurrentWordIndex] = useState(0);
+    const [prompt, setPrompt] = useState("");
     const [formattedResponse, setFormattedResponse] = useState("");
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
+    const chatHistoryRef = useRef(null);
     const words = formattedResponse.split(" ");
 
     const handleSendMessage = async (input) => {
         if (input.trim()) {
-            const userMessage = { message: input, type: "user" };
-            setChatHistory((prev) => [...prev, userMessage]);
+            setChatHistory([...chatHistory, { message: input, type: "user" }]);
             setInput("");
-            setPrompt(`${prompt} ${input}`); // Update the prompt
+            setPrompt(`${prompt} ${input}`);
 
             try {
                 const result = await chatSession.sendMessage(input);
-                const responseText = await result.response.text(); // Assuming this returns markdown
+                const responseText = result.response.text();
                 const formattedText = formatResponse(responseText);
-                setFormattedResponse(formattedText); // Set the formatted response text
-                setResponse(responseText); // Set the raw response text
-                setCurrentWordIndex(0); // Reset the word index
+                setFormattedResponse(formattedText);
+                setCurrentWordIndex(0);
             } catch (error) {
-                const errorMessage = {
-                    message: "Error communicating with AI",
-                    type: "bot",
-                };
-                console.log(error);
-                setChatHistory((prev) => [...prev, errorMessage]);
+                setChatHistory([...chatHistory, { message: "Error communicating with AI", type: "bot" }]);
             }
         }
     };
 
     useEffect(() => {
         if (currentWordIndex < words.length) {
-            const timer = setTimeout(() => {
-                setCurrentWordIndex(currentWordIndex + 1);
-            }, 25); // Adjust the interval as needed
+            const timer = setTimeout(() => setCurrentWordIndex(currentWordIndex + 1), 25);
             return () => clearTimeout(timer);
         } else if (formattedResponse) {
-            const botMessage = {
-                message: formattedResponse,
-                type: "bot",
-            };
-            setChatHistory((prev) => [...prev, botMessage]);
-            setFormattedResponse(""); // Clear the formatted response after displaying
+            setChatHistory([...chatHistory, { message: formattedResponse, type: "bot" }]);
+            setFormattedResponse("");
         }
     }, [currentWordIndex, words.length, formattedResponse]);
 
-    const formatResponse = (responseText) => {
-        // Convert Markdown to HTML
-        return md.render(responseText);
-    };
-
     useEffect(() => {
-        // Scroll to the bottom whenever chatHistory changes
         if (chatHistoryRef.current) {
             chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
         }
-    }, [chatHistory, prompt, currentWordIndex]); // Add prompt as a dependency
+    }, [chatHistory, currentWordIndex]);
 
-    // Add event listeners for copy buttons in highlighted code blocks
-    useEffect(() => {
-        const copyButtons = document.getElementsByClassName("copy-btn");
-
-        Array.from(copyButtons).forEach((button) => {
-            button.addEventListener("click", handleCopyClick);
-        });
-
-        return () => {
-            Array.from(copyButtons).forEach((button) => {
-                button.removeEventListener("click", handleCopyClick);
-            });
-        };
-    }, [chatHistory]); // Re-run effect whenever chatHistory updates
-
-    const handleCopyClick = (event) => {
-        // Find the closest code block to the clicked button
-        const codeBlock = event.target.closest("pre").querySelector("code");
-
-        if (codeBlock) {
-            navigator.clipboard.writeText(codeBlock.textContent).then(() => {
-                alert("Code copied to clipboard!");
-            }).catch((err) => {
-                console.error("Failed to copy: ", err);
-            });
-        }
-    };
+    useEffect(() => addCopyButtonListeners(), [chatHistory]);
 
     return (
-        <div className="chatbot-container">
-            <div className="chat-history" ref={chatHistoryRef}>
-                {chatHistory.map((chat, index) => (
-                    <div key={index} className={`chat-bubble ${chat.type}`}>
-                        {/* Render the response as HTML, with code blocks highlighted */}
-                        <div className="chat-message" dangerouslySetInnerHTML={{ __html: chat.message }} />
-                    </div>
-                ))}
-                <div className="chat-bubble bot">
-                    <div className="chat-message" dangerouslySetInnerHTML={{ __html: words.slice(0, currentWordIndex).join(" ") }} />
-                </div>
+        <ResizableBox
+            className="chatbot-container"
+            width={400} // Initial width
+            height={Infinity} // Full height
+            minConstraints={[300, Infinity]} // Minimum width
+            maxConstraints={[600, Infinity]} // Maximum width
+            axis="x" // Allow horizontal resizing only
+            handle={<div className="resize-handle" />} // Use a div as the handle
+            resizeHandles={["w"]} // Only allow resizing from the left
+        >
+            <div className="chatbot-inner">
+                <ChatHistory chatHistory={chatHistory} chatHistoryRef={chatHistoryRef} currentWord={words.slice(0, currentWordIndex).join(" ")} />
+                <ChatInput input={input} setInput={setInput} handleSendMessage={handleSendMessage} />
             </div>
-            <div className="chat-input-container">
-                <textarea
-                    className="chat-input"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Type your message..."
-                    rows={1}
-                />
-                <button
-                    className="send-btn"
-                    onClick={() => handleSendMessage(input)}
-                >
-                    Send
-                </button>
-            </div>
-        </div>
+        </ResizableBox>
     );
 }

@@ -2,10 +2,34 @@
     background-color: black;
     padding: 5px;
     display: flex;
+    height: 100vh; /* full-height layout */
+    width: 100vw; /* full-width layout */
 }
 
 .algo-hero {
     display: flex;
     flex-direction: column;
     width: 75%;
+    flex-grow: 1;
+    overflow: hidden; /* prevent content overflow when resizing */
+}
+
+  .resizable-chatbot {
+    width: 300px; /* initial width */
+    min-width: 200px; /* minimum width */
+    max-width: 500px; /* maximum width */
+    resize: horizontal; /* allow horizontal resizing */
+    overflow: auto;
+    background-color: #f0f0f0;
+  }
+  
+
+.resize-handle {
+    width: 10px; /* Width of the handle (adjust as necessary) */
+    height: 100%; /* Full height */
+    background-color: transparent; /* Change color for visibility or to your preference */
+    position: absolute; /* Position absolute to allow resizing from anywhere on the left */
+    left: -5px; /* Position to the left of the ResizableBox */
+    top: 0;
+    cursor: ew-resize; /* Change cursor to indicate resize action */
 }

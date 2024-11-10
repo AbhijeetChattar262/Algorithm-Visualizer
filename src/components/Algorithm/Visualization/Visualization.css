@@ -5,3 +5,57 @@
     border-radius: 10px;
     margin-top: 5px;
 }
+
+.array-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 10px;
+    height: 80%;
+}
+
+.array-bar {
+    width: 20px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.controls button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.speed-control label {
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.speed-control input[type="range"] {
+    width: 150px;
+    accent-color: #007bff;
+    cursor: pointer;
+}
+
+.swapAnimation{
+    transition: height 0.3s ease;
+}
