@@ -13,8 +13,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<Landing />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/categories/:category" element={<CategoryWrapper />} />
         <Route path="/categories/:category/:algorithm" element={<AlgorithmWrapper />} />
