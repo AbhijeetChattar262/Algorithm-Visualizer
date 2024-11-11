@@ -91,63 +91,47 @@ const quick_sort = (arr) => {
 const mergeSortHelper = (arr, start, end, moves) => {
     if (start >= end) return;
 
-    const mid = Math.floor((start + end) / 2);
+    let mid = Math.floor((start + end) / 2);
+
+    // Sort left half
     mergeSortHelper(arr, start, mid, moves);
+    // Sort right half
     mergeSortHelper(arr, mid + 1, end, moves);
-    merge(arr, start, mid, end, moves);
-};
 
-const merge = (arr, start, mid, end, moves) => {
-    const temp = Array(end - start + 1);
+    // Merge the sorted halves
+    let left = start;
+    let right = mid + 1;
     
-    let i = start;           // Left subarray pointer
-    let j = mid + 1;         // Right subarray pointer
-    let k = 0;              // Temp array pointer
-
-    // Compare and merge the subarrays
-    while (i <= mid && j <= end) {
-        // Compare elements from both subarrays
-        moves.push({ indices: [i, j], type: 'compare' });
+    while (left <= mid && right <= end) {
+        // Compare current elements from both halves
+        moves.push({ indices: [left, right], type: 'compare' });
         
-        if (arr[i].value <= arr[j].value) {
-            temp[k] = arr[i];
-            i++;
+        if (arr[left].value <= arr[right].value) {
+            left++;
         } else {
-            temp[k] = arr[j];
-            // Add swap animation when taking from right subarray
-            moves.push({ indices: [i, j], type: 'swap' });
-            j++;
-        }
-        k++;
-    }
-
-    // Copy remaining elements from left subarray
-    while (i <= mid) {
-        temp[k] = arr[i];
-        i++;
-        k++;
-    }
-
-    // Copy remaining elements from right subarray
-    while (j <= end) {
-        temp[k] = arr[j];
-        j++;
-        k++;
-    }
-
-    // Copy back to original array with swap animations
-    for (k = 0; k < temp.length; k++) {
-        if (arr[start + k].value !== temp[k].value) {
-            // Only animate actual changes
-            moves.push({ indices: [start + k, start + k], type: 'swap' });
-            arr[start + k] = temp[k];
+            // Save the value to insert
+            const temp = arr[right];
+            
+            // Shift all elements between left and right-1 one position to the right
+            for (let i = right; i > left; i--) {
+                moves.push({ indices: [i - 1, i], type: 'swap' });
+                arr[i] = arr[i - 1];
+            }
+            
+            // Place the saved value at the left position
+            arr[left] = temp;
+            
+            // Update pointers
+            left++;
+            mid++;
+            right++;
         }
     }
 };
 
 const merge_sort = (arr) => {
     const moves = [];
-    const arrayCopy = arr.map(item => ({...item}));  // Deep copy objects
+    const arrayCopy = arr.map(item => ({ ...item }));
     mergeSortHelper(arrayCopy, 0, arrayCopy.length - 1, moves);
     return moves;
 };
