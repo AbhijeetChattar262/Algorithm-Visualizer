@@ -1,112 +1,108 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import algorithms from '../../../algorithms/sorting';
 import './Visualization.css';
-
-const Visualization = () => {
+ 
+const Visualization = (algorithm) => {
     const size = 20;
     const [array, setArray] = useState([]);
     const [animations, setAnimations] = useState([]);
     const [isSorting, setIsSorting] = useState(false);
     const [animationSpeed, setAnimationSpeed] = useState(200);
-
+    const [comparing, setComparing] = useState([]);
+    const [swapping, setSwapping] = useState([]);
+ 
     const generateArray = () => {
-        const newArray = Array.from({ length: size }, () => (Math.random() * 100) + 1);
+        const newArray = Array.from({ length: size }, (_, idx) => ({
+            value: Math.floor(Math.random() * 100) + 1,
+            id: idx
+        }));
         setArray(newArray);
         setAnimations([]);
         setIsSorting(false);
+        setComparing([]);
+        setSwapping([]);
     };
-
+ 
     useEffect(() => {
         generateArray();
     }, []);
-
+ 
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms || animationSpeed));
-
-    const bubbleSort = (arr) => {
-        const moves = [];
-        const arrayCopy = [...arr];
-        let swapped;
-        
-        do {
-            swapped = false;
-            for (let i = 1; i < arrayCopy.length; i++) {
-                moves.push({ indices: [i - 1, i], type: 'compare' });
-                if (arrayCopy[i - 1] > arrayCopy[i]) {
-                    [arrayCopy[i - 1], arrayCopy[i]] = [arrayCopy[i], arrayCopy[i - 1]];
-                    swapped = true;
-                    moves.push({ indices: [i - 1, i], type: 'swap' });
-                }
-            }
-        } while (swapped);
-        return moves;
-    };
-
+ 
+ 
     const animate = async () => {
+        const newArray = [...array];
+       
         for (let i = 0; i < animations.length; i++) {
             const { indices, type } = animations[i];
-            const arrayBars = document.getElementsByClassName('array-bar');
-            
+           
             if (type === 'compare') {
-                arrayBars[indices[0]].style.backgroundColor = 'blue';
-                arrayBars[indices[1]].style.backgroundColor = 'blue';
-                await delay(animationSpeed);
+                setComparing(indices);
+                await delay(animationSpeed / 2);
             } else if (type === 'swap') {
-                arrayBars[indices[0]].style.backgroundColor = 'red';
-                arrayBars[indices[1]].style.backgroundColor = 'red';
-                
-                arrayBars[indices[0]].classList.add('swapAnimation');
-                arrayBars[indices[1]].classList.add('swapAnimation');
-
-                const tempHeight = arrayBars[indices[0]].style.height;
-                arrayBars[indices[0]].style.height = arrayBars[indices[1]].style.height;
-                arrayBars[indices[1]].style.height = tempHeight;
-
+                setSwapping(indices);
+                [newArray[indices[0]], newArray[indices[1]]] =
+                [newArray[indices[1]], newArray[indices[0]]];
+                setArray([...newArray]);
                 await delay(animationSpeed);
-                
-                arrayBars[indices[0]].classList.remove('swapAnimation');
-                arrayBars[indices[1]].classList.remove('swapAnimation');
+                setSwapping([]);
             }
-
-            arrayBars[indices[0]].style.backgroundColor = 'turquoise';
-            arrayBars[indices[1]].style.backgroundColor = 'turquoise';
+            setComparing([]);
         }
         setIsSorting(false);
     };
-
+ 
     const handleSort = () => {
         setIsSorting(true);
-        const moves = bubbleSort(array);
-        setAnimations(moves); // Trigger useEffect when animations are set
+        const sortingAlgorithm = algorithms[algorithm.algorithm];
+        const moves = sortingAlgorithm(array);
+        setAnimations(moves);
     };
-
+ 
     useEffect(() => {
         if (isSorting && animations.length > 0) {
-            animate(); // Start animation only after animations are set
+            animate();
         }
     }, [animations, isSorting]);
-
+ 
+    const spring = {
+        type: "spring",
+        damping: 20,
+        stiffness: 300
+    };
+ 
+    const getBarColor = (idx) => {
+        if (comparing.includes(idx)) return 'blue';
+        if (swapping.includes(idx)) return 'red';
+        return 'turquoise';
+    };
+ 
     return (
         <div className='visualization'>
             <div className='array-container'>
-                {array.map((value, idx) => (
-                    <div
+                {array.map((item, idx) => (
+                    <motion.div
                         className='array-bar'
-                        key={idx}
+                        key={item.id}
+                        layout
+                        transition={spring}
                         style={{
-                            height: `${value}%`,
-                            backgroundColor: 'turquoise',
+                            height: `${item.value}%`,
+                            backgroundColor: getBarColor(idx),
                         }}
-                    ></div>
+                    ></motion.div>
                 ))}
             </div>
             <div className="controls">
                 <button onClick={generateArray} disabled={isSorting}>Generate New Array</button>
-                <button onClick={handleSort} disabled={isSorting}>Bubble Sort</button>
+                <button onClick={handleSort} disabled={isSorting}>Start Sort</button>
                 <div className="speed-control">
                     <label>Speed:</label>
                     <span>Fast</span>
                     <input
                         type="range"
-                        min="300"
+                        min="50"
                         max="1000"
                         step="50"
                         value={animationSpeed}
@@ -119,5 +115,5 @@ const Visualization = () => {
         </div>
     );
 };
-
+ 
 export default Visualization;
