@@ -28,7 +28,8 @@ const Visualization = (algorithm) => {
         generateArray();
     }, []);
  
-    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms || animationSpeed));
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
  
  
     const animate = async () => {
@@ -39,13 +40,15 @@ const Visualization = (algorithm) => {
            
             if (type === 'compare') {
                 setComparing(indices);
-                await delay(animationSpeed / 2);
+                await delay(animationSpeed); // Higher slider value = lower delay
+
             } else if (type === 'swap') {
                 setSwapping(indices);
                 [newArray[indices[0]], newArray[indices[1]]] =
                 [newArray[indices[1]], newArray[indices[0]]];
                 setArray([...newArray]);
-                await delay(animationSpeed);
+                await delay(animationSpeed); // Higher slider value = lower delay
+
                 setSwapping([]);
             }
             setComparing([]);
@@ -98,19 +101,20 @@ const Visualization = (algorithm) => {
                 <button onClick={generateArray} disabled={isSorting}>Generate New Array</button>
                 <button onClick={handleSort} disabled={isSorting}>Start Sort</button>
                 <div className="speed-control">
-                    <label>Speed:</label>
-                    <span>Fast</span>
-                    <input
-                        type="range"
-                        min="50"
-                        max="1000"
-                        step="50"
-                        value={animationSpeed}
-                        onChange={(e) => setAnimationSpeed(Number(e.target.value))}
-                        disabled={isSorting}
-                    />
-                    <span>Slow</span>
-                </div>
+    <label>Speed:</label>
+    <span>Slow</span>
+    <input
+        type="range"
+        min="150" // Minimum value for the slowest speed
+        max="1500" // Maximum value for the fastest speed
+        step="50"
+        value={1500 - animationSpeed} // Invert the logic here
+        onChange={(e) => setAnimationSpeed(1500 - Number(e.target.value))}
+        disabled={isSorting}
+    />
+    <span>Fast</span>
+</div>
+
             </div>
         </div>
     );

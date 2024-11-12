@@ -1,6 +1,6 @@
 .visualization {
     position: relative;
-    background-color: rgb(22, 29, 78);
+    background-color: #1f2b37cd;
     height: calc(100vh - 175px);
     border-radius: 10px;
     margin-top: 5px;

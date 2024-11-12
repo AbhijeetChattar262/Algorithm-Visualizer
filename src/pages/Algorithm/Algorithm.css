@@ -1,9 +1,9 @@
 .algo-container {
-    background-color: black;
+  background-color: #1f2b37e6;
     padding: 5px;
     display: flex;
     height: 100vh; /* full-height layout */
-    width: 100vw; /* full-width layout */
+    overflow: hidden;
 }
 
 .algo-hero {
