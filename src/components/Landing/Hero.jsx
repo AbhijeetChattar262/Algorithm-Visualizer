@@ -32,7 +32,7 @@ export default function Hero() {
           </p>
           <button
             className="start-btn"
-            onClick={() => navigate("/categories")}
+            onClick={() => navigate("/home")}
           >
             <div className="start">Get Started</div>
             <div className="arrow">

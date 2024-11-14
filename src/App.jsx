@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Landing />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/test" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/categories/:category" element={<CategoryWrapper />} />
         <Route path="/categories/:category/:algorithm" element={<AlgorithmWrapper />} />
