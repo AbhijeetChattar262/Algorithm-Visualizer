@@ -94,3 +94,20 @@
   .speed-slider {
     width: 12rem;
   }
+
+  .button.pause {
+    background-color: #f39c12;
+  }
+  
+  .button.resume {
+    background-color: #27ae60;
+  }
+  
+  .button.reset {
+    background-color: #e74c3c;
+  }
+  
+  .button.step {
+    background-color: #3498db;
+  }
+  
