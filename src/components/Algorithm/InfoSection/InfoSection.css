@@ -1,5 +1,5 @@
 .info-section {
-    background-color: rgb(49, 40, 80);
+    background-color: #1f2b37cd;
     display: flex;
     height: 160px;
     border-radius: 10px;
@@ -11,14 +11,22 @@
 .slides {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    width: 400%;
+    width: calc(100% * 4); /* 4 is the number of slides */
 }
 
 .content {
     min-width: 100%;
-    padding: 20px 70px;
+    flex: 1;
+    padding: 60px;
     box-sizing: border-box;
 }
+
+.content {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+
 
 .content h3 {
     padding: 5px;
@@ -26,7 +34,7 @@
 }
 
 .content ol {
-    margin-left: 15px;
+    margin-left: 5px;
 }
 
 .prev,

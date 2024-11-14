@@ -12,29 +12,54 @@
     align-items: center;
 }
 
-.hero{
+.hero {
     position: absolute;
     background: linear-gradient(135deg, #1c0078ad, #000000ad);
-    padding: 80px;
+    padding: 50px;
     color: #fff;
     border-radius: 20px;
     height: 75vh;
-    width: 80vw;
+    width: 90vw;
     display: flex;
+    gap: 40px;
     align-items: center;
 }
 
-.text{
+.text {
     width: 50%;
-    font-size: 1.2rem;
-    
+    font-size: 1.2rem;  
 }
 
-.text h1, p{
-    margin-bottom: 40px;
+.carousel {
+    width: 40%; /* Adjust width as needed */
+}
+
+.carousel img {
+    width: 99%;
+    aspect-ratio: 1/0.95;
+}
+
+.carousel p{
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: #fff;
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.carousel-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text h1{
+    margin-bottom: 20px;
 }
 
 .start-btn{
+    margin-top: 30px;
     padding: 5px 5px;
     width: 250px;
     font-size: 1.2rem;

@@ -1,24 +1,10 @@
 .chatbot-container {
     position: relative;
-    background-color: #42425e;
+    background-color: #1f2b37cd;
     border-radius: 10px;
     padding: 10px;
     margin-left: 5px;
     overflow: hidden; /* Hide overflow to avoid scrollbars */
-}
-
-
-.chat-history {
-    position: relative;
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 10px 10px 0;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    background-color: #42425e;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
 }
 
 /* Chat bubbles */
@@ -39,7 +25,7 @@
 .chat-bubble.bot {
     max-width: fit-content;
     align-self: flex-start;
-    background-color: #2e2e2e;
+    background-color: #5b5b5b;
     color: black;
 }
 
@@ -58,6 +44,14 @@ ol {
 .hljs-string,
 .hljs-meta .hljs-string {
     color: #aad1ff;
+}
+
+.copy-btn{
+    padding: 5px;
+    background-color: grey;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
 .send-btn:hover {

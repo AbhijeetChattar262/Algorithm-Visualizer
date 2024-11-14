@@ -15,10 +15,6 @@ export const algorithmCategories = [
     title: "Dynamic Programming",
     image: "https://placehold.co/200",
   },
-  {
-    title: "Backtracking Algorithms",
-    image: "https://placehold.co/200",
-  },
 ];
 
 export const subCategories = {
@@ -27,12 +23,11 @@ export const subCategories = {
     "Insertion Sort",
     "Selection Sort",
     "Merge Sort",
-    "Quick Sort",
+    "Quick Sort"
   ],
   searching_algorithms: ["Linear Search", "Binary Search"],
   graph_algorithms: ["DFS", "BFS"],
-  dynamic_programming: ["Knapsack"],
-  backtracking_algorithms: ["Depth First Search", "Breadth First Search"],
+  dynamic_programming: ["Knapsack"]
 };
 
 export const infoSection = {
