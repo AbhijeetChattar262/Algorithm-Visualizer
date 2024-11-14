@@ -13,6 +13,8 @@ const Visualization = ({ algorithm }) => {
   const [animationSpeed, setAnimationSpeed] = useState(200);
   const [comparing, setComparing] = useState([]);
   const [swapping, setSwapping] = useState([]);
+  const [messageLog, setMessageLog] = useState([]);
+  const messageLogRef = useRef(null);
   
   // Use refs to maintain latest state in async functions
   const isPausedRef = useRef(isPaused);
@@ -38,6 +40,7 @@ const Visualization = ({ algorithm }) => {
     setComparing([]);
     setSwapping([]);
     setCurrentStep(0);
+    setMessageLog([]);
   };
 
   useEffect(() => {
@@ -46,6 +49,16 @@ const Visualization = ({ algorithm }) => {
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  const scrollToBottom = () => {
+    if (messageLogRef.current) {
+      messageLogRef.current.scrollTo({
+        top: messageLogRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  };
+  
+
   const animate = async () => {
     if (currentStepRef.current >= animations.length) {
       setIsSorting(false);
@@ -53,12 +66,17 @@ const Visualization = ({ algorithm }) => {
     }
 
     while (currentStepRef.current < animations.length && !isPausedRef.current) {
-      const { indices, type } = animations[currentStepRef.current];
+      const { indices, type, message } = animations[currentStepRef.current];
       const newArray = [...arrayRef.current];
 
+      setMessageLog(prevLog => {
+        const newLog = [...prevLog, message];
+        return newLog;
+      });
       if (type === 'compare') {
         setComparing(indices);
         await delay(animationSpeed);
+        setComparing([]);
       } else if (type === 'swap') {
         setSwapping(indices);
         [newArray[indices[0]], newArray[indices[1]]] = [
@@ -69,8 +87,9 @@ const Visualization = ({ algorithm }) => {
         await delay(animationSpeed);
         setSwapping([]);
       }
-      setComparing([]);
       setCurrentStep(prev => prev + 1);
+      currentStepRef.current += 1; // Ensure the ref is updated
+      scrollToBottom();
     }
 
     if (currentStepRef.current >= animations.length) {
@@ -102,13 +121,14 @@ const Visualization = ({ algorithm }) => {
     setComparing([]);
     setSwapping([]);
     setCurrentStep(0);
-    setAnimations([]); // Clear existing animations
+    setAnimations([]);
     generateArray();
+    setMessageLog([]);
   };
 
   const handleStep = async () => {
     if (currentStep < animations.length) {
-      const { indices, type } = animations[currentStep];
+      const { indices, type, message } = animations[currentStep];
       const newArray = [...array];
 
       if (type === 'compare') {
@@ -125,12 +145,16 @@ const Visualization = ({ algorithm }) => {
         await delay(animationSpeed);
         setSwapping([]);
       }
-
+      setMessageLog(prevLog => {
+        const newLog = [...prevLog, message];
+        return newLog;
+      });
       setCurrentStep(prev => prev + 1);
       if (currentStep + 1 >= animations.length) {
         setIsSorting(false);
       }
     }
+    scrollToBottom();
   };
 
   // Single useEffect to handle animation state
@@ -139,6 +163,11 @@ const Visualization = ({ algorithm }) => {
       animate();
     }
   }, [isSorting, isPaused, animations]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messageLog]);
+  
 
   const spring = {
     type: 'spring',
@@ -213,7 +242,6 @@ const Visualization = ({ algorithm }) => {
           Step
         </button>
       </div>
-
       <div className="speed-control">
         <span>Speed:</span>
         <span>Slow</span>
@@ -227,6 +255,11 @@ const Visualization = ({ algorithm }) => {
           className="speed-slider"
         />
         <span>Fast</span>
+      </div>
+      <div className="message-log" ref={messageLogRef}>
+        {messageLog.map((msg, index) => (
+          <div key={index} className="log-entry">Step {index+1} : {msg}</div>
+        ))}
       </div>
     </div>
   );
