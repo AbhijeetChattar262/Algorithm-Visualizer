@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { motion } from 'framer-motion';
 import './Visualization.css';
 import algorithms from '../../../algorithms/sorting';
@@ -95,6 +97,15 @@ const Visualization = ({ algorithm }) => {
 
     if (currentStepRef.current >= animations.length) {
       setIsSorting(false);
+      setMessageLog(prevLog => {
+        const newLog = [...prevLog, '✅ Sorting completed!'];
+        return newLog;
+      });
+      toast.success('🎉 Sorting completed! Please generate new array to begin visualization', {
+        position: 'top-right',
+        autoClose: 5000,
+        style: { backgroundColor: 'black' },
+      });
     }
   };
 
@@ -266,6 +277,7 @@ const Visualization = ({ algorithm }) => {
           <div key={index} className="log-entry">Step {index+1} : {msg}</div>
         ))}
       </motion.div>
+      <ToastContainer />
     </motion.div>
   );
 };
