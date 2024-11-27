@@ -1,16 +1,54 @@
 /* AlgorithmSidebar.css */
 .sidebar {
-    min-width: 256px;
     min-height: 100vh;
     background-color: #1f2b37;
     color: #f3f4f6;
     padding: 16px;
+    width: 256px;
+    transition: all 0.3s ease;
+  }
+  
+  .sidebar.collapsed {
+    width: 60px;
+    padding: 16px 8px;
+  }
+  
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  
+  .collapse-toggle {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+  }
+  
+  .collapse-toggle:hover {
+    background-color: #374151;
+  }
+  
+  .collapsed .sidebar-title,
+  .collapsed .category-label span,
+  .collapsed .chevron-icon,
+  .collapsed .algorithm-list {
+    display: none;
+  }
+  
+  .collapsed .category-button {
+    justify-content: center;
+    padding: 8px;
   }
   
   .sidebar-title {
+    padding: 8px;
     font-size: 1.25rem;
     font-weight: bold;
-    margin-bottom: 24px;
     text-align: center;
   }
   

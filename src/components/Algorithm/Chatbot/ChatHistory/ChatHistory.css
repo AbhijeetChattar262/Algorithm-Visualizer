@@ -2,13 +2,13 @@
     position: relative;
     flex: 1;
     overflow-y: auto;
-    padding: 0 10px 10px 0;
     margin-bottom: 10px;
     border-radius: 10px;
     background: transparent;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    max-height: calc(100vh - 180px); /* Adjust based on header and input heights */
 }
 
 /* Chat bubbles */

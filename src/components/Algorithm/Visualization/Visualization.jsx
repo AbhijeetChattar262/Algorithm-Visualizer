@@ -27,6 +27,7 @@ const Visualization = ({ algorithm }) => {
     currentStepRef.current = currentStep;
     arrayRef.current = array;
   }, [isPaused, currentStep, array]);
+    
 
   const generateArray = () => {
     const newArray = Array.from({ length: size }, (_, idx) => ({
@@ -167,6 +168,10 @@ const Visualization = ({ algorithm }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messageLog]);
+
+  useEffect(() => {
+    handleReset();
+  }, [algorithm]);
   
 
   const spring = {
@@ -183,8 +188,8 @@ const Visualization = ({ algorithm }) => {
   };
 
   return (
-    <div className="visualization-container">
-      <div className="array-container">
+    <motion.div className="visualization-container" layout transition={spring}>
+      <motion.div className="array-container" layout transition={spring}>
         {array.map((item, idx) => (
           <motion.div
             key={item.id}
@@ -196,9 +201,9 @@ const Visualization = ({ algorithm }) => {
             <div className="bar-label">{item.value}</div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      <div className="controls">
+      <motion.div className="controls" layout transition={spring}>
         <button 
           onClick={generateArray} 
           disabled={isSorting && !isPaused} 
@@ -241,8 +246,8 @@ const Visualization = ({ algorithm }) => {
         >
           Step
         </button>
-      </div>
-      <div className="speed-control">
+      </motion.div>
+      <motion.div className="speed-control" layout transition={spring}>
         <span>Speed:</span>
         <span>Slow</span>
         <input
@@ -255,13 +260,13 @@ const Visualization = ({ algorithm }) => {
           className="speed-slider"
         />
         <span>Fast</span>
-      </div>
-      <div className="message-log" ref={messageLogRef}>
+      </motion.div>
+      <motion.div className="message-log" ref={messageLogRef} layout transition={spring}>
         {messageLog.map((msg, index) => (
           <div key={index} className="log-entry">Step {index+1} : {msg}</div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

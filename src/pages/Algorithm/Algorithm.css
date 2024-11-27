@@ -1,28 +1,35 @@
 .algo-container {
-  background-color: #1f2b37e6;
-    padding: 5px;
     display: flex;
-    height: 100vh; /* full-height layout */
+    height: 100vh;
     overflow: hidden;
+    background-color: #1f2b37e6;
+    padding: 5px;
 }
 
 .algo-hero {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    width: 75%;
+    transition: width 0.3s ease-in-out;
+    width: 100%;
     flex-grow: 1;
     overflow: hidden; /* prevent content overflow when resizing */
+    transition: width 0.3s ease-in-out;
 }
 
-  .resizable-chatbot {
+.algo-hero.chatbot-expanded {
+    width: calc(100% - 300px);
+    transition: width 0.3s ease-in-out;
+}
+
+.resizable-chatbot {
     width: 300px; /* initial width */
     min-width: 200px; /* minimum width */
     max-width: 500px; /* maximum width */
     resize: horizontal; /* allow horizontal resizing */
     overflow: auto;
     background-color: #f0f0f0;
-  }
-  
+}
 
 .resize-handle {
     width: 10px; /* Width of the handle (adjust as necessary) */
