@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, Code, GitBranch, Share2, Search } from 'lucide-react';
+import { ChevronDown, ChevronRight, Code, GitBranch, Share2, Search, Menu, X } from 'lucide-react';
 import { algorithmCategories, subCategories } from '../../constants';
 import './AlgorithmSidebar.css';
 
-const Sidebar = ({ setSelectedAlgorithm }) => { // Correctly destructuring props
+const Sidebar = ({ setSelectedAlgorithm }) => {
   const [openCategories, setOpenCategories] = useState({});
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleCategory = (category) => {
     setOpenCategories((prev) => ({
@@ -27,8 +28,16 @@ const Sidebar = ({ setSelectedAlgorithm }) => { // Correctly destructuring props
   };
 
   return (
-    <div className="sidebar">
-      <div className="sidebar-title">Algorithm Hub</div>
+    <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`} style={{ minWidth: isCollapsed ? '55px' : '256px' }}>
+      <div className="sidebar-header">
+        {!isCollapsed && <div className="sidebar-title">Algorithm Hub</div>}
+        <button 
+          className="collapse-toggle"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          {isCollapsed ? <Menu size={24} /> : <X size={24} />}
+        </button>
+      </div>
       <nav className="sidebar-nav">
         {algorithmCategories.map(({ title }) => (
           <div key={title} className="category-container">
@@ -38,15 +47,13 @@ const Sidebar = ({ setSelectedAlgorithm }) => { // Correctly destructuring props
             >
               <div className="category-label">
                 {getCategoryIcon(title)}
-                <span>{title}</span>
+                {!isCollapsed && <span>{title}</span>}
               </div>
-              {openCategories[title] ? (
-                <ChevronDown className="chevron-icon" />
-              ) : (
-                <ChevronRight className="chevron-icon" />
+              {!isCollapsed && (
+                openCategories[title] ? <ChevronDown className="chevron-icon" /> : <ChevronRight className="chevron-icon" />
               )}
             </button>
-            {openCategories[title] && subCategories[title.toLowerCase().replace(/ /g, '_')] && (
+            {!isCollapsed && openCategories[title] && subCategories[title.toLowerCase().replace(/ /g, '_')] && (
               <div className="algorithm-list">
                 {subCategories[title.toLowerCase().replace(/ /g, '_')].map((item) => (
                   <button

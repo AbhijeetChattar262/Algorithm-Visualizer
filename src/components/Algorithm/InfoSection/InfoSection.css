@@ -1,24 +1,27 @@
 .info-section {
     background-color: #1f2b37cd;
     display: flex;
-    height: 160px;
+    height: 200px; 
     border-radius: 10px;
     align-items: center;
     position: relative;
     overflow: hidden;
+    transition: width 0.3s ease-in-out;
 }
 
 .slides {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    width: calc(100% * 4); /* 4 is the number of slides */
+    width: calc(100% * 4); 
 }
 
 .content {
     min-width: 100%;
     flex: 1;
-    padding: 60px;
+    padding: 20px 60px;  /* adjusted padding */
     box-sizing: border-box;
+    max-height: 200px;  /* new: match parent height */
+    overflow-y: auto;  /* new: allow scrolling if content is too long */
 }
 
 .content {
@@ -34,7 +37,7 @@
 }
 
 .content ol {
-    margin-left: 5px;
+    margin-left: 15px;
 }
 
 .prev,
@@ -42,10 +45,11 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgb(82, 82, 82);
+    background-color: rgba(82, 82, 82, 0.8);  /* slightly transparent */
     border-radius: 30%;
     padding: 10px;
     cursor: pointer;
+    z-index: 3;  /* ensure arrows are always on top */
 }
 
 .prev {

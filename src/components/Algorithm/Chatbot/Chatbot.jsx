@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ResizableBox } from "react-resizable"; 
+import { FaComments, FaTimes } from 'react-icons/fa'; // Add this import
 import ChatHistory from "./ChatHistory/ChatHistory";
 import ChatInput from "./ChatInput/ChatInput";
 import { addCopyButtonListeners } from "../../../utils/copy-to-clipboard.util";
@@ -8,7 +9,8 @@ import { chatSession } from "../../../utils/gemini";
 import "./Chatbot.css";
 import "react-resizable/css/styles.css"; // Import default styles for react-resizable
 
-export default function Chatbot() {
+export default function Chatbot({ onExpandChange }) {
+    const [isExpanded, setIsExpanded] = useState(false);
     const [chatHistory, setChatHistory] = useState([{ message: "Hello! How can I help you today?", type: "bot" }]);
     const [input, setInput] = useState("");
     const [prompt, setPrompt] = useState("");
@@ -16,6 +18,11 @@ export default function Chatbot() {
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const chatHistoryRef = useRef(null);
     const words = formattedResponse.split(" ");
+
+    const toggleChatbot = () => {
+        setIsExpanded(!isExpanded);
+        onExpandChange(!isExpanded);
+    };
 
     const handleSendMessage = async (input) => {
         if (input.trim()) {
@@ -54,20 +61,34 @@ export default function Chatbot() {
     useEffect(() => addCopyButtonListeners(), [chatHistory]);
 
     return (
-        <ResizableBox
-            className="chatbot-container"
-            width={400} // Initial width
-            height={Infinity} // Full height
-            minConstraints={[300, Infinity]} // Minimum width
-            maxConstraints={[600, Infinity]} // Maximum width
-            axis="x" // Allow horizontal resizing only
-            handle={<div className="resize-handle" />} // Use a div as the handle
-            resizeHandles={["w"]} // Only allow resizing from the left
-        >
-            <div className="chatbot-inner">
-                <ChatHistory chatHistory={chatHistory} chatHistoryRef={chatHistoryRef} currentWord={words.slice(0, currentWordIndex).join(" ")} />
-                <ChatInput input={input} setInput={setInput} handleSendMessage={handleSendMessage} />
-            </div>
-        </ResizableBox>
+        <div className={`chatbot-wrapper ${isExpanded ? 'expanded' : 'collapsed'}`}>
+            {isExpanded ? (
+                <ResizableBox
+                    className="chatbot-container"
+                    width={350}
+                    height={Infinity}
+                    minConstraints={[300, Infinity]}
+                    maxConstraints={[500, Infinity]}
+                    axis="x"
+                    handle={<div className="resize-handle" />}
+                    resizeHandles={["w"]}
+                >
+                    <div className="chatbot-header">
+                        <h3>Chat Assistant</h3>
+                        <button className="toggle-button" onClick={toggleChatbot}>
+                            <FaTimes />
+                        </button>
+                    </div>
+                    <div className="chatbot-inner">
+                        <ChatHistory chatHistory={chatHistory} chatHistoryRef={chatHistoryRef} currentWord={words.slice(0, currentWordIndex).join(" ")} />
+                        <ChatInput input={input} setInput={setInput} handleSendMessage={handleSendMessage} />
+                    </div>
+                </ResizableBox>
+            ) : (
+                <button className="chat-bubble-button" onClick={toggleChatbot}>
+                    <FaComments />
+                </button>
+            )}
+        </div>
     );
 }
