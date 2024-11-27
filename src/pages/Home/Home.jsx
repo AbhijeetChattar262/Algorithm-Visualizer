@@ -1,10 +1,10 @@
 import React from 'react'
 import Algorithm from '../Algorithm/Algorithm'
 import DefaultPage from '../DefaultPage/DefaultPage'
-import Sidebar from '../Sidebar/Sidebar'
+import Sidebar from '../../components/Sidebar/Sidebar'
+import { algorithmCategories } from '../../constants'
 import './Home.css'
-import { algorithmCategories, subCategories } from '../../constants'
-import SearchVisualization from '../Search/Search'
+import SearchingVisualizer from '../../components/SearchingVisualizer/SearchingVisualizer'
 
 const Home = () => {
 
@@ -18,7 +18,6 @@ const Home = () => {
         ) : (
           <DefaultPage />
         )}
-        {/* <SearchVisualization/> */}
     </div>
   )
 }

@@ -1,39 +1,59 @@
-const linear_search = (arr, target) => {
-    const moves = [];
-    for (let i = 0; i < arr.length; i++) {
-        moves.push({ index: i, type: 'compare' });
-        if (arr[i].value === target) {
-            moves.push({ index: i, type: 'found' });
-            return moves;
-        }
+const linear_search = (arr, key) => {
+  const moves = [];
+  for (let i = 0; i < arr.length; i++) {
+    moves.push({
+      indices: [i],
+      type: 'searching',
+      message: `Checking index ${i}: Is ${arr[i]} equal to ${key}?`
+    });
+    
+    if (arr[i] === key) {
+      moves.push({
+        indices: [i],
+        type: 'found',
+        message: `✅ Found ${key} at index ${i}!`
+      });
+      return moves;
     }
-    return moves;
+  }
+  return moves;
 };
 
-const binary_search = (arr, target) => {
-    const moves = [];
-    let left = 0;
-    let right = arr.length - 1;
+const binary_search = (arr, key) => {
+  const moves = [];
+  let left = 0;
+  let right = arr.length - 1;
 
-    while (left <= right) {
-        const mid = Math.floor((left + right) / 2);
-        moves.push({ index: mid, type: 'compare' });
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    
+    moves.push({
+      indices: [mid],
+      type: 'searching',
+      message: `Checking middle element at index ${mid}: Is ${arr[mid]} equal to ${key}?`
+    });
 
-        if (arr[mid].value === target) {
-            moves.push({ index: mid, type: 'found' });
-            return moves;
-        } else if (arr[mid].value < target) {
-            left = mid + 1;
-        } else {
-            right = mid - 1;
-        }
+    if (arr[mid] === key) {
+      moves.push({
+        indices: [mid],
+        type: 'found',
+        message: `✅ Found ${key} at index ${mid}!`
+      });
+      return moves;
     }
-    return moves;
+
+    if (arr[mid] < key) {
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+  return moves;
 };
 
 const algorithms = {
-    linear_search,
-    binary_search
+  linear_search,
+  binary_search,
 };
 
 export default algorithms;

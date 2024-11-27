@@ -1,7 +1,8 @@
 .info-section {
     background-color: #1f2b37cd;
     display: flex;
-    height: 200px; 
+    min-height: 165px; 
+    max-height: 165px; 
     border-radius: 10px;
     align-items: center;
     position: relative;
