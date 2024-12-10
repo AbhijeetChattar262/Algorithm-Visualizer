@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { ResizableBox } from "react-resizable"; 
 import { FaComments, FaTimes } from 'react-icons/fa'; // Add this import
 import ChatHistory from "./ChatHistory/ChatHistory";
@@ -6,11 +6,12 @@ import ChatInput from "./ChatInput/ChatInput";
 import { addCopyButtonListeners } from "../../../utils/copy-to-clipboard.util";
 import { formatResponse } from "../../../utils/markdown.util";
 import { chatSession } from "../../../utils/gemini";
+import { ChatbotContext } from '../../../context/ChatbotContext'; // Import context
 import "./Chatbot.css";
 import "react-resizable/css/styles.css"; // Import default styles for react-resizable
 
 export default function Chatbot({ onExpandChange }) {
-    const [isExpanded, setIsExpanded] = useState(false);
+    const { isExpanded, setIsExpanded } = useContext(ChatbotContext); // Use context
     const [chatHistory, setChatHistory] = useState([{ message: "Hello! How can I help you today?", type: "bot" }]);
     const [input, setInput] = useState("");
     const [prompt, setPrompt] = useState("");
@@ -73,16 +74,18 @@ export default function Chatbot({ onExpandChange }) {
                     handle={<div className="resize-handle" />}
                     resizeHandles={["w"]}
                 >
-                    <div className="chatbot-header">
-                        <h3>Chat Assistant</h3>
-                        <button className="toggle-button" onClick={toggleChatbot}>
-                            <FaTimes />
-                        </button>
-                    </div>
-                    <div className="chatbot-inner">
-                        <ChatHistory chatHistory={chatHistory} chatHistoryRef={chatHistoryRef} currentWord={words.slice(0, currentWordIndex).join(" ")} />
-                        <ChatInput input={input} setInput={setInput} handleSendMessage={handleSendMessage} />
-                    </div>
+                    <div> {/* Add this wrapper div */}
+                        <div className="chatbot-header">
+                            <h3>Chat Assistant</h3>
+                            <button className="toggle-button" onClick={toggleChatbot}>
+                                <FaTimes />
+                            </button>
+                        </div>
+                        <div className="chatbot-inner">
+                            <ChatHistory chatHistory={chatHistory} chatHistoryRef={chatHistoryRef} currentWord={words.slice(0, currentWordIndex).join(" ")} />
+                            <ChatInput input={input} setInput={setInput} handleSendMessage={handleSendMessage} />
+                        </div>
+                    </div> {/* Close the wrapper div */}
                 </ResizableBox>
             ) : (
                 <button className="chat-bubble-button" onClick={toggleChatbot}>

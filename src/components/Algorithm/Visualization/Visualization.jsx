@@ -16,6 +16,10 @@ const Visualization = ({ algorithm }) => {
   const [comparing, setComparing] = useState([]);
   const [swapping, setSwapping] = useState([]);
   const [messageLog, setMessageLog] = useState([]);
+  const [pivot, setPivot] = useState([]); // Add new state for pivot
+  const [sorted, setSorted] = useState([]); // New state
+  const [subarray, setSubarray] = useState([]); // New state
+  const [partition, setPartition] = useState([]); // New state
   const messageLogRef = useRef(null);
   
   // Use refs to maintain latest state in async functions
@@ -76,11 +80,17 @@ const Visualization = ({ algorithm }) => {
         const newLog = [...prevLog, message];
         return newLog;
       });
-      if (type === 'compare') {
+
+      if (type === 'pivot') {
+        setPivot(indices);
+        await delay(animationSpeed);
+      } else if (type === 'compare') {
+        setPivot([]);
         setComparing(indices);
         await delay(animationSpeed);
         setComparing([]);
       } else if (type === 'swap') {
+        setPivot([]);
         setSwapping(indices);
         [newArray[indices[0]], newArray[indices[1]]] = [
           newArray[indices[1]],
@@ -89,6 +99,18 @@ const Visualization = ({ algorithm }) => {
         setArray(newArray);
         await delay(animationSpeed);
         setSwapping([]);
+      } else if (type === 'sorted') {
+        setSorted(indices);
+        await delay(animationSpeed);
+        setSorted([]);
+      } else if (type === 'subarray') {
+        setSubarray(indices);
+        await delay(animationSpeed);
+        setSubarray([]);
+      } else if (type === 'partition') {
+        setPartition(indices);
+        await delay(animationSpeed);
+        setPartition([]);
       }
       setCurrentStep(prev => prev + 1);
       currentStepRef.current += 1; // Ensure the ref is updated
@@ -101,7 +123,7 @@ const Visualization = ({ algorithm }) => {
         const newLog = [...prevLog, '✅ Sorting completed!'];
         return newLog;
       });
-      toast.success('🎉 Sorting completed! Please generate new array to begin visualization', {
+      toast.success('Sorting completed! Please generate new array to begin visualization', {
         position: 'top-right',
         autoClose: 5000,
         style: { backgroundColor: 'black' },
@@ -136,6 +158,7 @@ const Visualization = ({ algorithm }) => {
     setAnimations([]);
     generateArray();
     setMessageLog([]);
+    setPivot([]); // Clear pivot state
   };
 
   const handleStep = async () => {
@@ -143,10 +166,20 @@ const Visualization = ({ algorithm }) => {
       const { indices, type, message } = animations[currentStep];
       const newArray = [...array];
 
-      if (type === 'compare') {
+      // Reset all visual states at the start of each step
+      setPivot([]);
+      setComparing([]);
+      setSwapping([]);
+      setSorted([]);
+      setSubarray([]);
+      setPartition([]);
+
+      if (type === 'pivot') {
+        setPivot(indices);
+        await delay(animationSpeed);
+      } else if (type === 'compare') {
         setComparing(indices);
         await delay(animationSpeed);
-        setComparing([]);
       } else if (type === 'swap') {
         setSwapping(indices);
         [newArray[indices[0]], newArray[indices[1]]] = [
@@ -155,18 +188,29 @@ const Visualization = ({ algorithm }) => {
         ];
         setArray(newArray);
         await delay(animationSpeed);
-        setSwapping([]);
+      } else if (type === 'sorted') {
+        setSorted(indices);
+        await delay(animationSpeed);
+      } else if (type === 'subarray') {
+        setSubarray(indices);
+        await delay(animationSpeed);
+      } else if (type === 'partition') {
+        setPartition(indices);
+        await delay(animationSpeed);
       }
+
       setMessageLog(prevLog => {
         const newLog = [...prevLog, message];
         return newLog;
       });
       setCurrentStep(prev => prev + 1);
+      
       if (currentStep + 1 >= animations.length) {
         setIsSorting(false);
+        setMessageLog(prevLog => [...prevLog, '✅ Sorting completed!']);
       }
+      scrollToBottom();
     }
-    scrollToBottom();
   };
 
   // Single useEffect to handle animation state
@@ -195,6 +239,10 @@ const Visualization = ({ algorithm }) => {
     const baseClass = 'array-bar';
     if (comparing.includes(idx)) return `${baseClass} comparing`;
     if (swapping.includes(idx)) return `${baseClass} swapping`;
+    if (pivot.includes(idx)) return `${baseClass} pivot`;
+    if (sorted.includes(idx)) return `${baseClass} sorted`; // New state
+    if (subarray.includes(idx)) return `${baseClass} subarray`; // New state
+    if (partition.includes(idx)) return `${baseClass} partition`; // New state
     return baseClass;
   };
 

@@ -26,7 +26,7 @@ export const subCategories = {
     "Quick Sort"
   ],
   searching_algorithms: ["Linear Search", "Binary Search"],
-  graph_algorithms: ["DFS", "BFS"],
+  graph_algorithms: ["Graph BFS", "Graph DFS", "Graph Dijkstra"], 
   dynamic_programming: ["Knapsack"]
 };
 
@@ -183,4 +183,61 @@ export const infoSection = {
       "Since it checks each element sequentially, it's inefficient for large datasets.",
     ],
   },
+  graph_bfs: {
+    info: "Breadth-first search (BFS) is a graph traversal algorithm that explores all vertices at the present depth before moving on to vertices at the next depth level.",
+    algorithm: [
+      "Start at a given source vertex",
+      "Explore all neighboring vertices at the current level",
+      "Move to the next level of vertices",
+      "Repeat until all vertices are visited"
+    ],
+    complexity: [
+      "Time Complexity: O(V + E) where V is vertices and E is edges",
+      "Space Complexity: O(V) for the queue"
+    ],
+    use_cases: [
+      "Finding shortest path in unweighted graphs",
+      "Social networking applications",
+      "GPS Navigation systems",
+      "Web crawlers"
+    ]
+  },
+  graph_dfs: {
+    info: "Depth-first search (DFS) is a graph traversal algorithm that explores as far as possible along each branch before backtracking.",
+    algorithm: [
+      "Start at a given source vertex",
+      "Recursively explore each unvisited neighbor",
+      "Backtrack when no unvisited neighbors remain",
+      "Repeat until all vertices are visited"
+    ],
+    complexity: [
+      "Time Complexity: O(V + E) where V is vertices and E is edges",
+      "Space Complexity: O(V) for the recursion stack"
+    ],
+    use_cases: [
+      "Topological sorting",
+      "Finding connected components",
+      "Maze generation",
+      "Solving puzzles"
+    ]
+  },
+  graph_dijkstra: {
+    info: "Dijkstra's algorithm finds the shortest path between nodes in a weighted graph.",
+    algorithm: [
+      "Start with distance to source vertex as 0 and all others as infinity",
+      "Select unvisited vertex with minimum distance",
+      "Update distances to all unvisited neighbors",
+      "Mark current vertex as visited and repeat"
+    ],
+    complexity: [
+      "Time Complexity: O((V + E) log V) with binary heap",
+      "Space Complexity: O(V)"
+    ],
+    use_cases: [
+      "GPS Navigation systems",
+      "Network routing protocols",
+      "Social networks",
+      "Games with pathfinding"
+    ]
+  }
 };

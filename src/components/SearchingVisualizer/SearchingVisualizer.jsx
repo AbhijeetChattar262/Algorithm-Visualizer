@@ -54,7 +54,7 @@ const SearchingVisualizer = ({ algorithm }) => {
       if (type === 'found') {
         elementFound = true;
         setFound(indices[0]);
-        toast.success(`🎉 Element ${searchKey} found at index ${indices[0]}`, {
+        toast.success(`Element ${searchKey} found at index ${indices[0]}`, {
           style: { backgroundColor: 'black' },
           position: "top-right",
           autoClose: 3000
@@ -66,7 +66,7 @@ const SearchingVisualizer = ({ algorithm }) => {
 
     if (!elementFound) {
         setMessages(prev => [...prev, `❌ Element ${searchKey} not found`]);
-      toast.error(`❌ Element ${searchKey} not found in array`, {
+      toast.error(`Element ${searchKey} not found in array`, {
         position: "top-right",
         autoClose: 3000,
         style: { backgroundColor: 'black' }
@@ -84,6 +84,12 @@ const SearchingVisualizer = ({ algorithm }) => {
         behavior: 'smooth',
       });
     }
+  };
+
+  const spring = {
+    type: 'spring',
+    damping: 20,
+    stiffness: 300,
   };
 
   useEffect(() => {
@@ -104,7 +110,7 @@ const SearchingVisualizer = ({ algorithm }) => {
 
   return (
     <div className="search-visualizer">
-      <div className="search-controls">
+      <motion.div className="search-controls" layout transition={spring}>
         <input
           type="number"
           value={searchKey}
@@ -126,27 +132,27 @@ const SearchingVisualizer = ({ algorithm }) => {
             onChange={(e) => setSpeed(1100 - e.target.value)}
           />
         </div>
-      </div>
+      </motion.div>
 
-      <motion.div className="numbers-grid">
+      <motion.div className="numbers-grid" layout transition={spring}>
         {array.map((num, idx) => (
-          <motion.div
+          <div
             key={idx}
             className={getBoxClassName(idx)}
             layout
           >
             {num}
-          </motion.div>
+          </div>
         ))}
       </motion.div>
 
-      <div className="message-log" ref={messageLogRef}>
+      <motion.div className="message-log" ref={messageLogRef} style={{maxHeight: '300px'}} layout transition={spring}>
         {messages.map((msg, idx) => (
           <div key={idx} className="log-entry">
             {msg}
           </div>
         ))}
-      </div>
+      </motion.div>
       <ToastContainer />
     </div>
   );
