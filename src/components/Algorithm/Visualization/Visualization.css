@@ -52,8 +52,30 @@
     background-color: red;
 }
 
+.array-bar.pivot {
+    background-color: #ff6b6b;
+    box-shadow: 0 0 10px #ff6b6b;
+    transition: all 0.3s ease;
+}
+
+.array-bar.sorted {
+    background-color: #2ecc71;
+    box-shadow: 0 0 10px #2ecc71;
+}
+
+.array-bar.subarray {
+    background-color: #9b59b6;
+    box-shadow: 0 0 10px #9b59b6;
+}
+
+.array-bar.partition {
+    background-color: #e67e22;
+    box-shadow: 0 0 10px #e67e22;
+}
+
 .controls {
     display: flex;
+    justify-content: center;
     gap: 1rem;
 }
 
