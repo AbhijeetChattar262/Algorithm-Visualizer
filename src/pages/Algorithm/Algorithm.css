@@ -15,6 +15,11 @@
     flex-grow: 1;
     overflow: hidden; /* prevent content overflow when resizing */
     transition: width 0.3s ease-in-out;
+    overflow-y: scroll;
+}
+
+.algo-hero::-webkit-scrollbar{
+    display: none;
 }
 
 .algo-hero.chatbot-expanded {
