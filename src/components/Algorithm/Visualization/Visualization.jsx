@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { motion } from 'framer-motion';
-import './Visualization.css';
-import algorithms from '../../../algorithms/sorting';
+import { useState, useEffect, useRef } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { motion } from "framer-motion";
+import "./Visualization.css";
+import algorithms from "../../../algorithms/sorting";
 
 const Visualization = ({ algorithm }) => {
   const size = 20;
@@ -21,7 +21,7 @@ const Visualization = ({ algorithm }) => {
   const [subarray, setSubarray] = useState([]); // New state
   const [partition, setPartition] = useState([]); // New state
   const messageLogRef = useRef(null);
-  
+
   // Use refs to maintain latest state in async functions
   const isPausedRef = useRef(isPaused);
   const currentStepRef = useRef(currentStep);
@@ -33,7 +33,6 @@ const Visualization = ({ algorithm }) => {
     currentStepRef.current = currentStep;
     arrayRef.current = array;
   }, [isPaused, currentStep, array]);
-    
 
   const generateArray = () => {
     const newArray = Array.from({ length: size }, (_, idx) => ({
@@ -60,11 +59,10 @@ const Visualization = ({ algorithm }) => {
     if (messageLogRef.current) {
       messageLogRef.current.scrollTo({
         top: messageLogRef.current.scrollHeight,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
-  
 
   const animate = async () => {
     if (currentStepRef.current >= animations.length) {
@@ -76,20 +74,20 @@ const Visualization = ({ algorithm }) => {
       const { indices, type, message } = animations[currentStepRef.current];
       const newArray = [...arrayRef.current];
 
-      setMessageLog(prevLog => {
+      setMessageLog((prevLog) => {
         const newLog = [...prevLog, message];
         return newLog;
       });
 
-      if (type === 'pivot') {
+      if (type === "pivot") {
         setPivot(indices);
         await delay(animationSpeed);
-      } else if (type === 'compare') {
+      } else if (type === "compare") {
         setPivot([]);
         setComparing(indices);
         await delay(animationSpeed);
         setComparing([]);
-      } else if (type === 'swap') {
+      } else if (type === "swap") {
         setPivot([]);
         setSwapping(indices);
         [newArray[indices[0]], newArray[indices[1]]] = [
@@ -99,35 +97,38 @@ const Visualization = ({ algorithm }) => {
         setArray(newArray);
         await delay(animationSpeed);
         setSwapping([]);
-      } else if (type === 'sorted') {
+      } else if (type === "sorted") {
         setSorted(indices);
         await delay(animationSpeed);
         setSorted([]);
-      } else if (type === 'subarray') {
+      } else if (type === "subarray") {
         setSubarray(indices);
         await delay(animationSpeed);
         setSubarray([]);
-      } else if (type === 'partition') {
+      } else if (type === "partition") {
         setPartition(indices);
         await delay(animationSpeed);
         setPartition([]);
       }
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep((prev) => prev + 1);
       currentStepRef.current += 1; // Ensure the ref is updated
       scrollToBottom();
     }
 
     if (currentStepRef.current >= animations.length) {
       setIsSorting(false);
-      setMessageLog(prevLog => {
-        const newLog = [...prevLog, '✅ Sorting completed!'];
+      setMessageLog((prevLog) => {
+        const newLog = [...prevLog, "✅ Sorting completed!"];
         return newLog;
       });
-      toast.success('Sorting completed! Please generate new array to begin visualization', {
-        position: 'top-right',
-        autoClose: 5000,
-        style: { backgroundColor: 'black' },
-      });
+      toast.success(
+        "Sorting completed! Please generate new array to begin visualization",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          style: { backgroundColor: "black" },
+        }
+      );
     }
   };
 
@@ -174,13 +175,13 @@ const Visualization = ({ algorithm }) => {
       setSubarray([]);
       setPartition([]);
 
-      if (type === 'pivot') {
+      if (type === "pivot") {
         setPivot(indices);
         await delay(animationSpeed);
-      } else if (type === 'compare') {
+      } else if (type === "compare") {
         setComparing(indices);
         await delay(animationSpeed);
-      } else if (type === 'swap') {
+      } else if (type === "swap") {
         setSwapping(indices);
         [newArray[indices[0]], newArray[indices[1]]] = [
           newArray[indices[1]],
@@ -188,26 +189,26 @@ const Visualization = ({ algorithm }) => {
         ];
         setArray(newArray);
         await delay(animationSpeed);
-      } else if (type === 'sorted') {
+      } else if (type === "sorted") {
         setSorted(indices);
         await delay(animationSpeed);
-      } else if (type === 'subarray') {
+      } else if (type === "subarray") {
         setSubarray(indices);
         await delay(animationSpeed);
-      } else if (type === 'partition') {
+      } else if (type === "partition") {
         setPartition(indices);
         await delay(animationSpeed);
       }
 
-      setMessageLog(prevLog => {
+      setMessageLog((prevLog) => {
         const newLog = [...prevLog, message];
         return newLog;
       });
-      setCurrentStep(prev => prev + 1);
-      
+      setCurrentStep((prev) => prev + 1);
+
       if (currentStep + 1 >= animations.length) {
         setIsSorting(false);
-        setMessageLog(prevLog => [...prevLog, '✅ Sorting completed!']);
+        setMessageLog((prevLog) => [...prevLog, "✅ Sorting completed!"]);
       }
       scrollToBottom();
     }
@@ -227,16 +228,15 @@ const Visualization = ({ algorithm }) => {
   useEffect(() => {
     handleReset();
   }, [algorithm]);
-  
 
   const spring = {
-    type: 'spring',
+    type: "spring",
     damping: 20,
     stiffness: 300,
   };
 
   const getBarClassName = (idx) => {
-    const baseClass = 'array-bar';
+    const baseClass = "array-bar";
     if (comparing.includes(idx)) return `${baseClass} comparing`;
     if (swapping.includes(idx)) return `${baseClass} swapping`;
     if (pivot.includes(idx)) return `${baseClass} pivot`;
@@ -248,51 +248,69 @@ const Visualization = ({ algorithm }) => {
 
   return (
     <motion.div className="visualization-container" layout transition={spring}>
-      <motion.div className="array-container" layout transition={spring}>
-        {array.map((item, idx) => (
-          <motion.div
-            key={item.id}
-            layout
-            transition={spring}
-            className={getBarClassName(idx)}
-            style={{ height: `${item.value}%` }}
-          >
-            <div className="bar-label">{item.value}</div>
-          </motion.div>
-        ))}
-      </motion.div>
+      <div className="visualization-content">
+        <motion.div className="array-container" layout transition={spring}>
+          {array.map((item, idx) => (
+            <motion.div
+              key={item.id}
+              layout
+              transition={spring}
+              className={getBarClassName(idx)}
+              style={{ height: `${item.value}%` }}
+            >
+              <div className="bar-label">{item.value}</div>
+            </motion.div>
+          ))}
+        </motion.div>
 
+        <motion.div
+          className="message-log-container"
+          layout
+          transition={spring}
+        >
+          <h4 className="message-log-header">Algorithm Steps</h4>
+          <div className="message-log" ref={messageLogRef}>
+            {messageLog.map((msg, index) => (
+              <div key={index} className="log-entry">
+                Step {index + 1} : {msg}
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Controls moved below the visualization content */}
       <motion.div className="controls" layout transition={spring}>
-        <button 
-          onClick={generateArray} 
-          disabled={isSorting && !isPaused} 
+        <button
+          onClick={generateArray}
+          disabled={isSorting && !isPaused}
           className="button generate"
         >
           Generate New Array
         </button>
-        <button 
-          onClick={handleSort} 
-          disabled={isSorting} 
+        <button
+          onClick={handleSort}
+          disabled={isSorting}
           className="button sort"
         >
           Start Sort
         </button>
-        <button 
-          onClick={handlePause} 
-          disabled={!isSorting || isPaused} 
+        <button
+          onClick={handlePause}
+          disabled={!isSorting || isPaused}
           className="button pause"
         >
           Pause
         </button>
-        <button 
-          onClick={handleResume} 
-          disabled={!isSorting || !isPaused} 
+        <button
+          onClick={handleResume}
+          disabled={!isSorting || !isPaused}
           className="button resume"
         >
           Resume
         </button>
-        <button 
-          onClick={handleReset} 
+        <button
+          onClick={handleReset}
           disabled={isSorting && !isPaused}
           className="button reset"
         >
@@ -300,7 +318,9 @@ const Visualization = ({ algorithm }) => {
         </button>
         <button
           onClick={handleStep}
-          disabled={isSorting && !isPaused || currentStep >= animations.length}
+          disabled={
+            (isSorting && !isPaused) || currentStep >= animations.length
+          }
           className="button step"
         >
           Step
@@ -319,11 +339,6 @@ const Visualization = ({ algorithm }) => {
           className="speed-slider"
         />
         <span>Fast</span>
-      </motion.div>
-      <motion.div className="message-log" ref={messageLogRef} layout transition={spring}>
-        {messageLog.map((msg, index) => (
-          <div key={index} className="log-entry">Step {index+1} : {msg}</div>
-        ))}
       </motion.div>
       <ToastContainer />
     </motion.div>

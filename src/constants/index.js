@@ -12,7 +12,7 @@ export const algorithmCategories = [
     image: "https://placehold.co/200",
   },
   {
-    title: "Dynamic Programming",
+    title: "Data Structures",
     image: "https://placehold.co/200",
   },
 ];
@@ -20,14 +20,15 @@ export const algorithmCategories = [
 export const subCategories = {
   sorting_algorithms: [
     "Bubble Sort",
+    ,
     "Insertion Sort",
     "Selection Sort",
     "Merge Sort",
-    "Quick Sort"
+    "Quick Sort",
   ],
   searching_algorithms: ["Linear Search", "Binary Search"],
-  graph_algorithms: ["Graph BFS", "Graph DFS", "Graph Dijkstra"], 
-  dynamic_programming: ["Knapsack"]
+  graph_algorithms: ["Graph BFS", "Graph DFS", "Graph Dijkstra"],
+  data_structures: ["Array", "Linked List", "Stack", "Queue"],
 };
 
 export const infoSection = {
@@ -189,18 +190,19 @@ export const infoSection = {
       "Start at a given source vertex",
       "Explore all neighboring vertices at the current level",
       "Move to the next level of vertices",
-      "Repeat until all vertices are visited"
+      "Repeat until all vertices are visited",
     ],
     complexity: [
       "Time Complexity: O(V + E) where V is vertices and E is edges",
-      "Space Complexity: O(V) for the queue"
+      "Space Complexity: O(V) for the queue",
     ],
     use_cases: [
+      ,
       "Finding shortest path in unweighted graphs",
       "Social networking applications",
       "GPS Navigation systems",
-      "Web crawlers"
-    ]
+      "Web crawlers",
+    ],
   },
   graph_dfs: {
     info: "Depth-first search (DFS) is a graph traversal algorithm that explores as far as possible along each branch before backtracking.",
@@ -208,18 +210,19 @@ export const infoSection = {
       "Start at a given source vertex",
       "Recursively explore each unvisited neighbor",
       "Backtrack when no unvisited neighbors remain",
-      "Repeat until all vertices are visited"
+      "Repeat until all vertices are visited",
     ],
     complexity: [
       "Time Complexity: O(V + E) where V is vertices and E is edges",
-      "Space Complexity: O(V) for the recursion stack"
+      "Space Complexity: O(V) for the recursion stack",
     ],
     use_cases: [
+      ,
       "Topological sorting",
       "Finding connected components",
       "Maze generation",
-      "Solving puzzles"
-    ]
+      "Solving puzzles",
+    ],
   },
   graph_dijkstra: {
     info: "Dijkstra's algorithm finds the shortest path between nodes in a weighted graph.",
@@ -227,17 +230,116 @@ export const infoSection = {
       "Start with distance to source vertex as 0 and all others as infinity",
       "Select unvisited vertex with minimum distance",
       "Update distances to all unvisited neighbors",
-      "Mark current vertex as visited and repeat"
+      "Mark current vertex as visited and repeat",
     ],
     complexity: [
       "Time Complexity: O((V + E) log V) with binary heap",
-      "Space Complexity: O(V)"
+      "Space Complexity: O(V)",
     ],
     use_cases: [
+      ,
       "GPS Navigation systems",
+      ,
       "Network routing protocols",
       "Social networks",
-      "Games with pathfinding"
-    ]
-  }
+      "Games with pathfinding",
+    ],
+  },
+  array: {
+    info: "An array is a collection of items stored at contiguous memory locations. The idea is to store multiple items of the same type together in memory, allowing random access of elements using indices.",
+    algorithm: [
+      "Random Access: Elements can be accessed directly using their index",
+      "Insertion: Adding an element at a specific position requires shifting elements",
+      "Deletion: Removing an element requires shifting subsequent elements",
+      "Search: Linear search can be performed to find elements",
+      "Update: Elements can be updated directly using their index",
+    ],
+    complexity: [
+      "Access: O(1) - Constant time to access any element by index",
+      "Insertion: O(n) - Worst case when inserting at the beginning requires shifting all elements",
+      "Deletion: O(n) - Worst case when deleting at the beginning requires shifting all elements",
+      "Search: O(n) - Linear time to find an element in an unsorted array",
+      "Space Complexity: O(n) - Linear space proportional to the number of elements",
+    ],
+    use_cases: [
+      "Storing and accessing sequential data",
+      "Temporary storage of objects",
+      "Used as building blocks for more complex data structures",
+      "Implementing matrices and multi-dimensional data",
+      "Buffers for I/O operations",
+    ],
+  },
+
+  linked_list: {
+    info: "A linked list is a linear data structure where elements are not stored at contiguous memory locations. Each element (node) contains data and a reference (link) to the next node in the sequence.",
+    algorithm: [
+      "Node Structure: Each node contains data and a reference to the next node",
+      "Traversal: Start from the head node and follow references until the end",
+      "Insertion: Create a new node and adjust references to include it in the list",
+      "Deletion: Adjust references to exclude a node from the list",
+      "Search: Sequentially traverse the list to find elements",
+    ],
+    complexity: [
+      "Access: O(n) - Need to traverse from head to locate an element",
+      "Insertion: O(1) - If inserting at known position (like head or tail)",
+      "Deletion: O(1) - If deleting from known position (like head)",
+      "Search: O(n) - Need to traverse sequentially to find an element",
+      "Space Complexity: O(n) - Linear space proportional to the number of elements",
+    ],
+    use_cases: [
+      "Dynamic memory allocation",
+      "Implementing stacks and queues",
+      "Creating circular lists and doubly linked lists",
+      "Undo functionality in applications",
+      "Managing songs in a music player",
+    ],
+  },
+
+  stack: {
+    info: "A stack is a linear data structure that follows the Last In First Out (LIFO) principle. Elements are added and removed from the same end called the 'top'.",
+    algorithm: [
+      "Push: Add an element to the top of the stack",
+      "Pop: Remove and return the top element from the stack",
+      "Peek/Top: Return the top element without removing it",
+      "isEmpty: Check if the stack is empty",
+    ],
+    complexity: [
+      "Push: O(1) - Constant time to add an element to the top",
+      "Pop: O(1) - Constant time to remove an element from the top",
+      "Peek: O(1) - Constant time to view the top element",
+      "Search: O(n) - Potentially need to check all elements",
+      "Space Complexity: O(n) - Linear space proportional to the number of elements",
+    ],
+    use_cases: [
+      "Function call management (call stack)",
+      "Expression evaluation and syntax parsing",
+      "Undo mechanisms in text editors and applications",
+      "Browser history (back button functionality)",
+      "Backtracking algorithms",
+    ],
+  },
+
+  queue: {
+    info: "A queue is a linear data structure that follows the First In First Out (FIFO) principle. Elements are added at the rear and removed from the front.",
+    algorithm: [
+      "Enqueue: Add an element to the rear of the queue",
+      "Dequeue: Remove and return the element from the front",
+      "Front: Return the first element without removing it",
+      "isEmpty: Check if the queue is empty",
+    ],
+    complexity: [
+      "Enqueue: O(1) - Constant time to add an element to the rear",
+      "Dequeue: O(1) - Constant time to remove an element from the front",
+      "Front: O(1) - Constant time to view the front element",
+      "Search: O(n) - May need to check all elements",
+      "Space Complexity: O(n) - Linear space proportional to the number of elements",
+    ],
+    use_cases: [
+      "CPU and Disk Scheduling",
+      "Handling service requests on a single shared resource",
+      "Asynchronous data transfer",
+      "Breadth-First Search algorithm implementation",
+      "Print queue management",
+    ],
+  },
 };
