@@ -1,0 +1,66 @@
+.messageLogContainer {
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+  background-color: rgba(15, 15, 15, 0.5);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-left: 4px solid #ff9800;
+  height: 100%;
+  overflow: hidden;
+  max-height: 400px;
+}
+
+.messageLogHeader {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ff9800;
+  margin: 0 0 10px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.messageLog {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #666 #333;
+  flex: 1;
+  background-color: #222;
+  border-radius: 6px;
+}
+
+.messageLog::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messageLog::-webkit-scrollbar-track {
+  background: #333;
+  border-radius: 4px;
+}
+
+.messageLog::-webkit-scrollbar-thumb {
+  background-color: #666;
+  border-radius: 4px;
+}
+
+.logEntry {
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 14px;
+  color: #ddd;
+}
+
+.logEntry:last-child {
+  border-bottom: none;
+  color: #4caf50;
+  font-weight: bold;
+}
+
+@media (max-width: 992px) {
+  .messageLogContainer {
+    min-height: 250px;
+  }
+}

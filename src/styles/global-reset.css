@@ -1,0 +1,73 @@
+/* Reset CSS to ensure consistent styling across browsers */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure text color doesn't leak between components */
+body {
+  color: #f3f4f6;
+  font-family: "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #1f2b37;
+  line-height: 1.5;
+}
+
+/* Remove default button styling */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+/* Remove default list styling */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Basic link styling */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Make sure images don't overflow their containers */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fix input and textarea overflow */
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Improve accessibility */
+:focus {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+
+/* Remove outline for non-keyboard focus */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Improved scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #333;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #666;
+  border-radius: 4px;
+}

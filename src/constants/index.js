@@ -1,26 +1,24 @@
 export const algorithmCategories = [
   {
-    title: "Sorting Algorithms",
-    image: "https://placehold.co/200",
+    title: "Data Structures",
   },
   {
     title: "Searching Algorithms",
-    image: "https://placehold.co/200",
+  },
+  {
+    title: "Sorting Algorithms",
   },
   {
     title: "Graph Algorithms",
-    image: "https://placehold.co/200",
   },
   {
-    title: "Data Structures",
-    image: "https://placehold.co/200",
+    title: "Pathfinding Algorithms",
   },
 ];
 
 export const subCategories = {
   sorting_algorithms: [
     "Bubble Sort",
-    ,
     "Insertion Sort",
     "Selection Sort",
     "Merge Sort",
@@ -29,6 +27,7 @@ export const subCategories = {
   searching_algorithms: ["Linear Search", "Binary Search"],
   graph_algorithms: ["Graph BFS", "Graph DFS", "Graph Dijkstra"],
   data_structures: ["Array", "Linked List", "Stack", "Queue"],
+  pathfinding_algorithms: ["A*", "Dijkstra"],
 };
 
 export const infoSection = {
@@ -197,7 +196,6 @@ export const infoSection = {
       "Space Complexity: O(V) for the queue",
     ],
     use_cases: [
-      ,
       "Finding shortest path in unweighted graphs",
       "Social networking applications",
       "GPS Navigation systems",
@@ -217,7 +215,6 @@ export const infoSection = {
       "Space Complexity: O(V) for the recursion stack",
     ],
     use_cases: [
-      ,
       "Topological sorting",
       "Finding connected components",
       "Maze generation",
@@ -237,9 +234,7 @@ export const infoSection = {
       "Space Complexity: O(V)",
     ],
     use_cases: [
-      ,
       "GPS Navigation systems",
-      ,
       "Network routing protocols",
       "Social networks",
       "Games with pathfinding",
@@ -340,6 +335,52 @@ export const infoSection = {
       "Asynchronous data transfer",
       "Breadth-First Search algorithm implementation",
       "Print queue management",
+    ],
+  },
+
+  astar: {
+    info: "A* (A-Star) is an informed search algorithm that finds the shortest path from a start node to a goal node in a graph. It uses a heuristic function to guide its search, making it more efficient than algorithms like Dijkstra's for many applications.",
+    algorithm: [
+      "Start with the initial node and calculate its f-score (f = g + h, where g is the cost from start and h is the heuristic estimate to goal).",
+      "While there are nodes to explore, select the node with lowest f-score.",
+      "If this node is the goal, reconstruct and return the path.",
+      "Otherwise, mark the node as visited and explore all its neighbors.",
+      "For each neighbor, calculate a tentative g-score through the current node.",
+      "If this path is better than any previous path to this neighbor, update the neighbor's scores and set its parent to the current node.",
+    ],
+    complexity: [
+      "Time Complexity: O(b^d) where b is the branching factor and d is the depth of the solution.",
+      "With a good heuristic, performance can approach O(d).",
+      "Space Complexity: O(b^d) to store all nodes.",
+    ],
+    use_cases: [
+      "Pathfinding in games and navigation systems.",
+      "Robotics motion planning.",
+      "Network routing protocols.",
+      "Solving puzzles like the 15-puzzle or Rubik's cube.",
+    ],
+  },
+
+  "a*": {
+    info: "A* (pronounced 'A-star') is an informed search algorithm that finds the shortest path from a start node to a goal node in a graph. It uses a heuristic function to guide its search, making it more efficient than algorithms like Dijkstra's for many applications.",
+    algorithm: [
+      "Start with the initial node and calculate its f-score (f = g + h, where g is the cost from start and h is the heuristic estimate to goal).",
+      "While there are nodes to explore, select the node with lowest f-score.",
+      "If this node is the goal, reconstruct and return the path.",
+      "Otherwise, mark the node as visited and explore all its neighbors.",
+      "For each neighbor, calculate a tentative g-score through the current node.",
+      "If this path is better than any previous path to this neighbor, update the neighbor's scores and set its parent to the current node.",
+    ],
+    complexity: [
+      "Time Complexity: O(b^d) where b is the branching factor and d is the depth of the solution.",
+      "With a good heuristic, performance can approach O(d).",
+      "Space Complexity: O(b^d) to store all nodes.",
+    ],
+    use_cases: [
+      "Pathfinding in games and navigation systems.",
+      "Robotics motion planning.",
+      "Network routing protocols.",
+      "Solving puzzles like the 15-puzzle or Rubik's cube.",
     ],
   },
 };

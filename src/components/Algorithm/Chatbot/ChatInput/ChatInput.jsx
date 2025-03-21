@@ -1,30 +1,43 @@
-import React from 'react';
-import './ChatInput.css'; // Import the CSS for styling
+import React from "react";
+import styles from "./ChatInput.module.css";
+import { FaLocationArrow } from "react-icons/fa";
 
 const ChatInput = ({ input, setInput, handleSendMessage }) => {
-    const handleKeyPress = (event) => {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault(); // Prevents a new line
-            handleSendMessage(input);
-            setInput('');
-        }
-    };
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault(); // Prevents a new line
+      if (input.trim()) {
+        handleSendMessage(input);
+      }
+    }
+  };
 
-    return (
-        <div className="chat-input-container">
-            <textarea
-                className="chat-input"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyPress}
-                placeholder="Type your message..."
-                rows={3} // Set the initial number of visible rows
-            />
-            <button className="send-btn" onClick={() => handleSendMessage(input)}>
-                Send
-            </button>
-        </div>
-    );
+  const handleSubmit = () => {
+    if (input.trim()) {
+      handleSendMessage(input);
+    }
+  };
+
+  return (
+    <div className={styles.chatInputContainer}>
+      <textarea
+        className={styles.chatInput}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={handleKeyPress}
+        placeholder="Type your message..."
+        rows={3}
+      />
+      <button
+        className={styles.sendBtn}
+        onClick={handleSubmit}
+        disabled={!input.trim()}
+        aria-label="Send message"
+      >
+        <FaLocationArrow />
+      </button>
+    </div>
+  );
 };
 
 export default ChatInput;

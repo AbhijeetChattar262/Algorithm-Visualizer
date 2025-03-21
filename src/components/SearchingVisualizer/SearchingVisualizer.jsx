@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./SearchingVisualizer.css";
+import styles from "./SearchingVisualizer.module.css";
+import SpeedControl from "../UI/SpeedControl/SpeedControl";
+import MessageLog from "../UI/MessageLog/MessageLog";
+import VisualizationContainer from "../UI/VisualizationContainer/VisualizationContainer";
 
 const SearchingVisualizer = ({ algorithm }) => {
   const [array, setArray] = useState([]);
@@ -13,6 +16,7 @@ const SearchingVisualizer = ({ algorithm }) => {
   const [foundIndex, setFoundIndex] = useState(-1);
   const [speed, setSpeed] = useState(500);
   const [messages, setMessages] = useState([]);
+  const [highlightedIndices, setHighlightedIndices] = useState([]);
 
   const messageLogRef = useRef(null);
   const isPausedRef = useRef(isPaused);
@@ -49,6 +53,7 @@ const SearchingVisualizer = ({ algorithm }) => {
     setCurrentIndex(-1);
     setFoundIndex(-1);
     setMessages([]);
+    setHighlightedIndices([]);
   };
 
   const scrollToBottom = () => {
@@ -109,11 +114,14 @@ const SearchingVisualizer = ({ algorithm }) => {
 
   const binarySearch = async () => {
     setIsSearching(true);
-    setFoundIndex(-1);
+    setFoundIndex(-1); // Reset found index
     setMessages([`Starting Binary Search for value: ${targetValue}`]);
 
     let left = 0;
     let right = array.length - 1;
+
+    // Create an array to track visited indices
+    const visitedIndices = [];
 
     while (left <= right) {
       // Check if search is paused
@@ -123,6 +131,11 @@ const SearchingVisualizer = ({ algorithm }) => {
 
       const mid = Math.floor((left + right) / 2);
       setCurrentIndex(mid);
+      visitedIndices.push(mid);
+
+      // Update state to show which indices have been visited
+      setHighlightedIndices([...visitedIndices]);
+
       setMessages((prev) => [...prev, `Calculating mid point: ${mid}`]);
       setMessages((prev) => [
         ...prev,
@@ -132,7 +145,8 @@ const SearchingVisualizer = ({ algorithm }) => {
       await delay(speed);
 
       if (array[mid] === parseInt(targetValue)) {
-        setFoundIndex(mid);
+        setCurrentIndex(-1); // Clear current index highlight
+        setFoundIndex(mid); // Set the found index explicitly
         setMessages((prev) => [
           ...prev,
           `Found ${targetValue} at index ${mid}!`,
@@ -142,6 +156,9 @@ const SearchingVisualizer = ({ algorithm }) => {
           autoClose: 5000,
           style: { backgroundColor: "black" },
         });
+
+        // Make sure we're still in searching state when we display the found element
+        await delay(speed * 2);
         setIsSearching(false);
         return;
       }
@@ -204,94 +221,100 @@ const SearchingVisualizer = ({ algorithm }) => {
   };
 
   return (
-    <div className="searching-visualizer">
-      <div className="controls">
-        <input
-          type="number"
-          value={targetValue}
-          onChange={(e) => setTargetValue(e.target.value)}
-          placeholder="Enter a number to search"
-          disabled={isSearching}
-          className="search-input"
-        />
-        <button
-          onClick={handleSearch}
-          disabled={isSearching && !isPaused}
-          className="button search"
-        >
-          Search
-        </button>
-        <button
-          onClick={generateNewArray}
-          disabled={isSearching && !isPaused}
-          className="button generate"
-        >
-          Generate New Array
-        </button>
-        {isSearching && (
-          <>
-            {isPaused ? (
-              <button onClick={handleResume} className="button resume">
-                Resume
-              </button>
-            ) : (
-              <button onClick={handlePause} className="button pause">
-                Pause
-              </button>
-            )}
-          </>
-        )}
-        <div className="speed-control">
-          <span>Speed:</span>
+    <VisualizationContainer title="Searching Visualization">
+      <div className={styles.searchingVisualizer}>
+        <div className={styles.controls}>
           <input
-            type="range"
-            min="100"
-            max="1000"
-            value={1100 - speed}
-            onChange={(e) => setSpeed(1100 - parseInt(e.target.value))}
-            disabled={isSearching && !isPaused}
+            type="number"
+            value={targetValue}
+            onChange={(e) => setTargetValue(e.target.value)}
+            placeholder="Enter a number to search"
+            disabled={isSearching}
+            className={styles.searchInput}
           />
-          <span>Fast</span>
-        </div>
-      </div>
+          <button
+            onClick={handleSearch}
+            disabled={isSearching && !isPaused}
+            className={`${styles.button} ${styles.search}`}
+          >
+            Search
+          </button>
+          <button
+            onClick={generateNewArray}
+            disabled={isSearching && !isPaused}
+            className={`${styles.button} ${styles.generate}`}
+          >
+            Generate New Array
+          </button>
+          {isSearching && (
+            <>
+              {isPaused ? (
+                <button
+                  onClick={handleResume}
+                  className={`${styles.button} ${styles.resume}`}
+                >
+                  Resume
+                </button>
+              ) : (
+                <button
+                  onClick={handlePause}
+                  className={`${styles.button} ${styles.pause}`}
+                >
+                  Pause
+                </button>
+              )}
+            </>
+          )}
 
-      <div className="visualization-area">
-        <div className="array-container">
-          {array.map((value, idx) => (
-            <motion.div
-              key={idx}
-              className={`array-element ${
-                idx === currentIndex
-                  ? "current"
-                  : idx === foundIndex
-                  ? "found"
-                  : currentIndex > idx && algorithm === "linear_search"
-                  ? "checked"
-                  : ""
-              }`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: idx * 0.05 }}
-            >
-              <div className="array-value">{value}</div>
-              <div className="array-index">{idx}</div>
-            </motion.div>
-          ))}
+          <SpeedControl
+            value={1100 - speed}
+            onChange={(value) => setSpeed(1100 - value)}
+            min={100}
+            max={1000}
+            disabled={isSearching && !isPaused}
+            isReversed={false}
+            className={styles.speedControlWrapper}
+          />
         </div>
 
-        <div className="message-log-container">
-          <h4>Search Steps</h4>
-          <div className="message-log" ref={messageLogRef}>
-            {messages.map((message, idx) => (
-              <div key={idx} className="log-entry">
-                {message}
-              </div>
+        {/* Visualization area now contains only the array display */}
+        <div className={styles.visualizationArea}>
+          <div className={styles.arrayContainer}>
+            {array.map((value, idx) => (
+              <motion.div
+                key={idx}
+                className={`${styles.arrayElement} ${
+                  idx === foundIndex
+                    ? styles.found
+                    : idx === currentIndex
+                    ? styles.current
+                    : highlightedIndices.includes(idx)
+                    ? styles.checked
+                    : currentIndex > idx && algorithm === "linear_search"
+                    ? styles.checked
+                    : ""
+                }`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: idx * 0.05 }}
+              >
+                <div className={styles.arrayValue}>{value}</div>
+                <div className={styles.arrayIndex}>{idx}</div>
+              </motion.div>
             ))}
           </div>
         </div>
+
+        {/* Message log now appears below the visualization */}
+        <MessageLog
+          messages={messages}
+          title="Search Steps"
+          className={styles.messageLog}
+        />
+
+        <ToastContainer />
       </div>
-      <ToastContainer />
-    </div>
+    </VisualizationContainer>
   );
 };
 
