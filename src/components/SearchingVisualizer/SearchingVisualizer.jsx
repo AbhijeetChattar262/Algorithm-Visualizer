@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './SearchingVisualizer.css';
-import algorithms from '../../algorithms/searching';
+import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./SearchingVisualizer.css";
+import algorithms from "../../algorithms/searching";
 
 const SearchingVisualizer = ({ algorithm }) => {
   const [array, setArray] = useState([]);
-  const [searchKey, setSearchKey] = useState('');
+  const [searchKey, setSearchKey] = useState("");
   const [searchingIndex, setSearchingIndex] = useState(null);
   const [found, setFound] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
@@ -18,14 +18,15 @@ const SearchingVisualizer = ({ algorithm }) => {
 
   const generateArray = () => {
     const size = 12; // Smaller size for better visibility
-    const newArray = Array.from({ length: size }, () => 
-      Math.floor(Math.random() * 99) + 1
+    const newArray = Array.from(
+      { length: size },
+      () => Math.floor(Math.random() * 99) + 1
     );
-    
-    if (algorithm === 'binary_search') {
+
+    if (algorithm === "binary_search") {
       newArray.sort((a, b) => a - b);
     }
-    
+
     setArray(newArray);
     setFound(null);
     setSearchingIndex(null);
@@ -35,7 +36,7 @@ const SearchingVisualizer = ({ algorithm }) => {
 
   const search = async () => {
     if (!searchKey || isSearching) return;
-    
+
     setIsSearching(true);
     setFound(null);
     setMessages([]);
@@ -48,28 +49,28 @@ const SearchingVisualizer = ({ algorithm }) => {
 
     for (const { indices, type, message } of animations) {
       setSearchingIndex(indices[0]);
-      setSearchedIndices(prev => [...prev, indices[0]]);
-      setMessages(prev => [...prev, message]);
-      
-      if (type === 'found') {
+      setSearchedIndices((prev) => [...prev, indices[0]]);
+      setMessages((prev) => [...prev, message]);
+
+      if (type === "found") {
         elementFound = true;
         setFound(indices[0]);
         toast.success(`Element ${searchKey} found at index ${indices[0]}`, {
-          style: { backgroundColor: 'black' },
+          style: { backgroundColor: "black" },
           position: "top-right",
-          autoClose: 3000
+          autoClose: 3000,
         });
       }
-      
-      await new Promise(r => setTimeout(r, speed));
+
+      await new Promise((r) => setTimeout(r, speed));
     }
 
     if (!elementFound) {
-        setMessages(prev => [...prev, `❌ Element ${searchKey} not found`]);
+      setMessages((prev) => [...prev, `❌ Element ${searchKey} not found`]);
       toast.error(`Element ${searchKey} not found in array`, {
         position: "top-right",
         autoClose: 3000,
-        style: { backgroundColor: 'black' }
+        style: { backgroundColor: "black" },
       });
     }
 
@@ -81,13 +82,13 @@ const SearchingVisualizer = ({ algorithm }) => {
     if (messageLogRef.current) {
       messageLogRef.current.scrollTo({
         top: messageLogRef.current.scrollHeight,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
 
   const spring = {
-    type: 'spring',
+    type: "spring",
     damping: 20,
     stiffness: 300,
   };
@@ -101,11 +102,11 @@ const SearchingVisualizer = ({ algorithm }) => {
   }, [algorithm]);
 
   const getBoxClassName = (idx) => {
-    const classes = ['number-box'];
-    if (idx === searchingIndex) classes.push('searching-box');
-    if (searchedIndices.includes(idx)) classes.push('searched-box');
-    if (found === idx) classes.push('found');
-    return classes.join(' ');
+    const classes = ["number-box"];
+    if (idx === searchingIndex) classes.push("searching-box");
+    if (searchedIndices.includes(idx)) classes.push("searched-box");
+    if (found === idx) classes.push("found");
+    return classes.join(" ");
   };
 
   return (
@@ -136,17 +137,19 @@ const SearchingVisualizer = ({ algorithm }) => {
 
       <motion.div className="numbers-grid" layout transition={spring}>
         {array.map((num, idx) => (
-          <div
-            key={idx}
-            className={getBoxClassName(idx)}
-            layout
-          >
+          <div key={idx} className={getBoxClassName(idx)} layout>
             {num}
           </div>
         ))}
       </motion.div>
 
-      <motion.div className="message-log" ref={messageLogRef} style={{maxHeight: '300px'}} layout transition={spring}>
+      <motion.div
+        className="message-log"
+        ref={messageLogRef}
+        style={{ maxHeight: "300px" }}
+        layout
+        transition={spring}
+      >
         {messages.map((msg, idx) => (
           <div key={idx} className="log-entry">
             {msg}
