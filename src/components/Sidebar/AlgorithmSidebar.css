@@ -1,133 +1,142 @@
 /* AlgorithmSidebar.css */
 .sidebar {
-    min-height: 100vh;
-    background-color: #1f2b37;
-    color: #f3f4f6;
-    padding: 16px;
-    width: 256px;
-    transition: all 0.3s ease;
+  max-height: 100vh;
+  background-color: #1f2b37;
+  color: #f3f4f6;
+  padding: 16px;
+  width: 256px;
+  transition: all 0.3s ease;
+  overflow: auto;
+}
+
+.sidebar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.sidebar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.sidebar.collapsed {
+  width: 60px;
+  padding: 16px 8px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.collapse-toggle {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.collapse-toggle:hover {
+  background-color: #374151;
+}
+
+.collapsed .sidebar-title,
+.collapsed .category-label span,
+.collapsed .chevron-icon,
+.collapsed .algorithm-list {
+  display: none;
+}
+
+.collapsed .category-button {
+  justify-content: center;
+  padding: 8px;
+}
+
+.sidebar-title {
+  padding: 8px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.category-container {
+  margin-bottom: 8px;
+}
+
+.category-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.category-button:hover {
+  background-color: #374151;
+}
+
+.category-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.chevron-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.algorithm-list {
+  margin-left: 24px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.algorithm-item {
+  width: 100%;
+  text-align: left;
+  padding: 8px;
+  background: none;
+  border: none;
+  color: #d1d5db;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.algorithm-item:hover {
+  background-color: #374151;
+  color: #f3f4f6;
+}
+
+/* Optional: Add a smooth transition for the dropdown */
+.algorithm-list {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  
-  .sidebar.collapsed {
-    width: 60px;
-    padding: 16px 8px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-  }
-  
-  .collapse-toggle {
-    background: none;
-    border: none;
-    color: inherit;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-  }
-  
-  .collapse-toggle:hover {
-    background-color: #374151;
-  }
-  
-  .collapsed .sidebar-title,
-  .collapsed .category-label span,
-  .collapsed .chevron-icon,
-  .collapsed .algorithm-list {
-    display: none;
-  }
-  
-  .collapsed .category-button {
-    justify-content: center;
-    padding: 8px;
-  }
-  
-  .sidebar-title {
-    padding: 8px;
-    font-size: 1.25rem;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-  .category-container {
-    margin-bottom: 8px;
-  }
-  
-  .category-button {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px;
-    background: none;
-    border: none;
-    color: inherit;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: background-color 0.2s;
-  }
-  
-  .category-button:hover {
-    background-color: #374151;
-  }
-  
-  .category-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .category-icon {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .chevron-icon {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .algorithm-list {
-    margin-left: 24px;
-    margin-top: 4px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  
-  .algorithm-item {
-    width: 100%;
-    text-align: left;
-    padding: 8px;
-    background: none;
-    border: none;
-    color: #d1d5db;
-    cursor: pointer;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    transition: background-color 0.2s, color 0.2s;
-  }
-  
-  .algorithm-item:hover {
-    background-color: #374151;
-    color: #f3f4f6;
-  }
-  
-  /* Optional: Add a smooth transition for the dropdown */
-  .algorithm-list {
-    animation: slideDown 0.2s ease-out;
-  }
-  
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+}
