@@ -1,0 +1,37 @@
+.flexContainer {
+  display: flex;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.gap-small {
+  gap: 5px;
+}
+
+.gap-medium {
+  gap: 15px;
+}
+
+.gap-large {
+  gap: 25px;
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .gap-large {
+    gap: 15px;
+  }
+}

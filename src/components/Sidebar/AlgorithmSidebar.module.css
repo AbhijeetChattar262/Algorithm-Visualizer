@@ -1,0 +1,142 @@
+/* AlgorithmSidebar.module.css */
+.sidebar {
+  max-height: 100vh;
+  background-color: #1f2b37;
+  color: #f3f4f6;
+  padding: 16px;
+  width: 256px;
+  transition: all 0.3s ease;
+  overflow: auto;
+}
+
+.sidebar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.sidebar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.sidebar.collapsed {
+  width: 60px;
+  padding: 16px 8px;
+}
+
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.collapseToggle {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.collapseToggle:hover {
+  background-color: #374151;
+}
+
+.collapsed .sidebarTitle,
+.collapsed .categoryLabel span,
+.collapsed .chevronIcon,
+.collapsed .algorithmList {
+  display: none;
+}
+
+.collapsed .categoryButton {
+  justify-content: center;
+  padding: 8px;
+}
+
+.sidebarTitle {
+  padding: 8px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.categoryContainer {
+  margin-bottom: 8px;
+}
+
+.categoryButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.categoryButton:hover {
+  background-color: #374151;
+}
+
+.categoryLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.categoryIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.chevronIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.algorithmList {
+  margin-left: 24px;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.algorithmItem {
+  width: 100%;
+  text-align: left;
+  padding: 8px;
+  background: none;
+  border: none;
+  color: #d1d5db;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.algorithmItem:hover {
+  background-color: #374151;
+  color: #f3f4f6;
+}
+
+/* Optional: Add a smooth transition for the dropdown */
+.algorithmList {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

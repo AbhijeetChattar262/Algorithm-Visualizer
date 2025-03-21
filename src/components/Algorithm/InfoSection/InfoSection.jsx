@@ -1,65 +1,116 @@
-import React from 'react';
-import { infoSection } from '../../../constants';
-import './InfoSection.css';
+import React from "react";
+import { motion } from "framer-motion";
+import styles from "./InfoSection.module.css";
+import { infoSection } from "../../../constants";
 
-export default function InfoSection({ algorithm }) {
-    const [slide, setSlide] = React.useState(0);
+const InfoSection = ({ algorithm }) => {
+  // Add error handling and fallback for algorithm info
+  let algorithmInfo = {};
+  try {
+    // Handle different formats of algorithm names
+    const normalizedAlgorithm = algorithm.toLowerCase().replace(/\*/g, "star");
 
-    const totalSlides = 4;
-
-    const nextSlide = () => {
-        setSlide((prevSlide) => (prevSlide + 1) % totalSlides);
+    // If the algorithm info exists directly, use it
+    if (infoSection[algorithm]) {
+      algorithmInfo = infoSection[algorithm];
+    }
+    // Try the normalized version
+    else if (infoSection[normalizedAlgorithm]) {
+      algorithmInfo = infoSection[normalizedAlgorithm];
+    }
+    // Default to empty object with placeholder text
+    else {
+      algorithmInfo = {
+        info: `Information about ${algorithm} is not available yet.`,
+        algorithm: ["Algorithm details will be added soon."],
+        complexity: ["Complexity analysis will be added soon."],
+        use_cases: ["Use cases will be added soon."],
+      };
+      console.warn(`No information found for algorithm: ${algorithm}`);
+    }
+  } catch (error) {
+    console.error(`Error loading information for ${algorithm}:`, error);
+    algorithmInfo = {
+      info: "Algorithm information could not be loaded.",
+      algorithm: ["Please try another algorithm."],
+      complexity: [""],
+      use_cases: [""],
     };
+  }
 
-    const prevSlide = () => {
-        setSlide((prevSlide) =>
-            prevSlide === 0 ? totalSlides - 1 : prevSlide - 1
-        );
-    };
+  // Use the algorithmInfo safely with default values as fallback
+  const {
+    info = "",
+    algorithm: steps = [],
+    complexity = [],
+    use_cases = [],
+  } = algorithmInfo;
 
-    return (
-        <div className="info-section">
-            <div className="prev" onClick={prevSlide}>
-                <i className="fa-solid fa-arrow-left"></i>
-            </div>
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
 
-            <div className="slides" style={{ transform: `translateX(-${slide * 100}%)` }}>
-                <div className="content">
-                    <h3>Information</h3>
-                    <p>{infoSection[algorithm].info}</p>
-                </div>
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+  };
 
-                <div className="content">
-                    <h3>Algorithm Steps</h3>
-                    <ol>
-                        {infoSection[algorithm].algorithm.map((step, index) => (
-                            <li key={index}>{step}</li>
-                        ))}
-                    </ol>
-                </div>
+  return (
+    <motion.div
+      className={styles.infoSection}
+      variants={container}
+      initial="hidden"
+      animate="show"
+    >
+      <motion.div className={styles.infoDescription} variants={item}>
+        <motion.h2 className={styles.algorithmTitle} variants={item}>
+          {algorithm.replace(/_/g, " ").toUpperCase()}
+        </motion.h2>
+        <motion.p variants={item}>{info}</motion.p>
+      </motion.div>
 
-                <div className="content">
-                    <h3>Complexity</h3>
-                    <ol>
-                        {infoSection[algorithm].complexity.map((item, index) => (
-                            <li key={index}>{item}</li>
-                        ))}
-                    </ol>
-                </div>
+      <motion.div variants={container} className={styles.infoDetailsContainer}>
+        <motion.div className={styles.infoDetails} variants={item}>
+          <motion.h3 variants={item}>Algorithm Steps</motion.h3>
+          <motion.ul variants={container}>
+            {steps.map((step, index) => (
+              <motion.li key={index} variants={item}>
+                {step}
+              </motion.li>
+            ))}
+          </motion.ul>
+        </motion.div>
 
-                <div className="content">
-                    <h3>Use Cases</h3>
-                    <ol>
-                        {infoSection[algorithm].use_cases.map((useCase, index) => (
-                            <li key={index}>{useCase}</li>
-                        ))}
-                    </ol>
-                </div>
-            </div>
+        <motion.div className={styles.infoDetails} variants={item}>
+          <motion.h3 variants={item}>Complexity Analysis</motion.h3>
+          <motion.ul variants={container}>
+            {complexity.map((point, index) => (
+              <motion.li key={index} variants={item}>
+                {point}
+              </motion.li>
+            ))}
+          </motion.ul>
+        </motion.div>
 
-            <div className="next" onClick={nextSlide}>
-                <i className="fa-solid fa-arrow-right"></i>
-            </div>
-        </div>
-    );
-}
+        <motion.div className={styles.infoDetails} variants={item}>
+          <motion.h3 variants={item}>Use Cases</motion.h3>
+          <motion.ul variants={container}>
+            {use_cases.map((useCase, index) => (
+              <motion.li key={index} variants={item}>
+                {useCase}
+              </motion.li>
+            ))}
+          </motion.ul>
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+export default InfoSection;

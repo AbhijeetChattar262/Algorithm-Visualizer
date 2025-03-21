@@ -1,0 +1,47 @@
+.algoContainer {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #1f2b37e6;
+  padding: 5px;
+}
+
+.algoHero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease-in-out;
+  width: 100%;
+  flex-grow: 1;
+  overflow: hidden; /* prevent content overflow when resizing */
+  transition: width 0.3s ease-in-out;
+  overflow-y: scroll;
+}
+
+.algoHero::-webkit-scrollbar {
+  display: none;
+}
+
+.algoHero.chatbotExpanded {
+  width: calc(100% - 300px);
+  transition: width 0.3s ease-in-out;
+}
+
+.resizableChatbot {
+  width: 300px; /* initial width */
+  min-width: 200px; /* minimum width */
+  max-width: 500px; /* maximum width */
+  resize: horizontal; /* allow horizontal resizing */
+  overflow: auto;
+  background-color: #f0f0f0;
+}
+
+.resizeHandle {
+  width: 10px; /* Width of the handle (adjust as necessary) */
+  height: 100%; /* Full height */
+  background-color: transparent; /* Change color for visibility or to your preference */
+  position: absolute; /* Position absolute to allow resizing from anywhere on the left */
+  left: -5px; /* Position to the left of the ResizableBox */
+  top: 0;
+  cursor: ew-resize; /* Change cursor to indicate resize action */
+}

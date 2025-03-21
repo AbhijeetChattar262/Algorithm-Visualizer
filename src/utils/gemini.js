@@ -8,7 +8,7 @@ if (!apiKey) {
 const genAI = new GoogleGenerativeAI(apiKey);
 // Get the specific generative model
 const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash",
+  model: "gemini-2.0-flash",
 });
 // Define the configuration for the generation
 const generationConfig = {
@@ -22,7 +22,6 @@ const generationConfig = {
 export const chatSession = model.startChat({
   generationConfig,
   // safetySettings: Adjust safety settings
-  // See
-  //ai.google.dev/gemini-api/docs/safety-settings
-  https: history,
+  // See https://ai.google.dev/gemini-api/docs/safety-settings
+  history: [],
 });

@@ -1,0 +1,107 @@
+.chatHistory {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  border-radius: 10px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: calc(100vh - 180px);
+  padding: 10px 5px;
+  scrollbar-width: thin;
+  scrollbar-color: #666 transparent;
+}
+
+.chatHistory::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatHistory::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatHistory::-webkit-scrollbar-thumb {
+  background-color: #666;
+  border-radius: 10px;
+}
+
+/* Chat bubbles */
+.chatBubble {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 10px;
+  word-wrap: break-word;
+  max-width: 90%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chatBubble.user {
+  align-self: flex-end;
+  background-color: #007bff;
+  color: white;
+  border-bottom-right-radius: 3px;
+}
+
+.chatBubble.bot {
+  align-self: flex-start;
+  background-color: #4ba600;
+  color: #ffffff;
+  border-bottom-left-radius: 3px;
+  max-width: 95%; /* Increased to better accommodate code blocks */
+  width: fit-content;
+}
+
+.chatMessage {
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+/* Improve code block display */
+.chatMessage :global(pre.hljs) {
+  position: relative;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 10px 0;
+}
+
+.chatMessage :global(code) {
+  background-color: #1c1c1c;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 90%;
+}
+
+.chatMessage :global(pre code) {
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  display: block;
+}
+
+/* Scrollbar styling for code blocks */
+.chatMessage :global(pre.hljs::-webkit-scrollbar) {
+  height: 6px;
+}
+
+.chatMessage :global(pre.hljs::-webkit-scrollbar-track) {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.chatMessage :global(pre.hljs::-webkit-scrollbar-thumb) {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+.chatMessage p {
+  margin: 0 0 10px 0;
+}
+
+.chatMessage ul,
+.chatMessage ol {
+  margin-left: 15px;
+  padding-left: 10px;
+}
