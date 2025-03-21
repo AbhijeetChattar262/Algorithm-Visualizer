@@ -9,7 +9,7 @@ import GraphVisualizer from "../../components/GraphVisualizer/GraphVisualizer";
 import DataStructuresVisualizer from "../../components/DataStructuresVisualizer/DataStructuresVisualizer";
 import PathfindingVisualizer from "../../components/PathfindingVisualizer/PathfindingVisualizer";
 
-export default function Algorithm({ algorithm }) {
+export default function Algorithm({ algorithm, sidebarCollapsed }) {
   const [isChatbotExpanded, setIsChatbotExpanded] = useState(false);
   const [prevAlgorithm, setPrevAlgorithm] = useState("");
 
@@ -44,6 +44,7 @@ export default function Algorithm({ algorithm }) {
         className={`${styles.algoHero} ${
           isChatbotExpanded ? styles.chatbotExpanded : ""
         }`}
+        style={{ width: "100%" }}
       >
         <AnimatePresence mode="wait">
           <InfoSection key={`info-${algorithm}`} algorithm={algorithm} />
@@ -52,7 +53,12 @@ export default function Algorithm({ algorithm }) {
         <AnimatePresence mode="wait">
           {isSorting && <Visualization algorithm={algorithm} />}
           {isSearching && <SearchingVisualizer algorithm={algorithm} />}
-          {isGraph && <GraphVisualizer algorithm={algorithm} />}
+          {isGraph && (
+            <GraphVisualizer
+              algorithm={algorithm}
+              sidebarCollapsed={sidebarCollapsed}
+            />
+          )}
           {isDataStructure && (
             <DataStructuresVisualizer
               key={`ds-${algorithm}`}

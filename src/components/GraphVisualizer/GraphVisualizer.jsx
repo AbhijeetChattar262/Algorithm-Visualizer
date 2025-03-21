@@ -9,7 +9,7 @@ import Button from "../UI/Button/Button";
 import VisualizationContainer from "../UI/VisualizationContainer/VisualizationContainer";
 import MessageLog from "../UI/MessageLog/MessageLog";
 
-const GraphVisualizer = ({ algorithm }) => {
+const GraphVisualizer = ({ algorithm, sidebarCollapsed }) => {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [isVisualizing, setIsVisualizing] = useState(false);
@@ -205,6 +205,11 @@ const GraphVisualizer = ({ algorithm }) => {
     window.addEventListener("resize", handleResize);
     handleResize();
 
+    // Call handleResize when the sidebar collapse state changes
+    if (sidebarCollapsed !== undefined) {
+      setTimeout(handleResize, 300); // Add delay to let the sidebar animation complete
+    }
+
     // Only generate a new graph if there are no nodes yet
     if (nodes.length === 0) {
       generateRandomGraph();
@@ -212,7 +217,7 @@ const GraphVisualizer = ({ algorithm }) => {
     }
 
     return () => window.removeEventListener("resize", handleResize);
-  }, [algorithm]);
+  }, [algorithm, sidebarCollapsed]);
 
   // Draw the graph whenever nodes, edges, or visited nodes change
   const drawGraph = () => {

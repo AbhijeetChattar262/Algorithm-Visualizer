@@ -143,70 +143,114 @@ const DataStructuresVisualizer = ({ algorithm, prevAlgorithm }) => {
         setCurrentAnimation(animation);
         setMessages((prev) => [...prev, animation.message]);
 
-        // Process different animation types
-        switch (animation.type) {
-          case "highlight":
-            setHighlightedIndices(animation.indices || [animation.index]);
-            break;
-          case "insert":
-          case "shift":
-          case "update":
-            setHighlightedIndices(animation.indices || [animation.index]);
-            break;
-          case "compare":
-            setHighlightedIndices(animation.indices || [animation.index]);
-            break;
-          case "found":
-            setHighlightedIndices([animation.index]);
-            toast.success(`Found element at index ${animation.index}`, {
-              style: { backgroundColor: "black" },
-              icon: <FaRegLightbulb />,
-            });
-            break;
-          case "not-found":
-            toast.error(animation.message, {
-              style: { backgroundColor: "black" },
-              icon: <FaExclamationTriangle />,
-            });
-            break;
-          case "create-node":
-            // Visualization for creating a new node
-            break;
-          case "update-head":
-          case "update-next":
-            setHighlightedIndices([animation.index]);
-            break;
-          case "push":
-          case "pop":
-          case "peek":
-          case "enqueue":
-          case "dequeue":
-          case "front":
-            if (animation.index !== undefined) {
-              setHighlightedIndices([animation.index]);
+        // Process animation specifically for linked list operations to ensure proper highlighting
+        if (dataStructureType === "linked_list") {
+          // Make sure we correctly identify the node to highlight
+          let indicesToHighlight = [];
+
+          if (animation.index !== undefined) {
+            indicesToHighlight.push(animation.index);
+          }
+
+          if (animation.indices) {
+            indicesToHighlight = [...indicesToHighlight, ...animation.indices];
+          }
+
+          if (animation.node) {
+            // Handle cases where node has position, index, row, or col
+            const nodeIndex =
+              animation.node.position !== undefined
+                ? animation.node.position
+                : animation.node.index !== undefined
+                ? animation.node.index
+                : animation.node.row !== undefined
+                ? animation.node.row
+                : animation.node.col;
+
+            if (nodeIndex !== undefined) {
+              indicesToHighlight.push(nodeIndex);
             }
-            break;
-          case "final":
-            if (animation.array) setElements(animation.array);
-            if (animation.list) setElements(animation.list);
-            if (animation.stack) setElements(animation.stack);
-            if (animation.queue) setElements(animation.queue);
-            setHighlightedIndices([]);
-            break;
-          case "error":
-            toast.error(animation.message, {
-              style: { backgroundColor: "black" },
-              icon: <FaExclamationTriangle />,
-            });
-            break;
-          default:
-            break;
+          }
+
+          setHighlightedIndices(indicesToHighlight);
+        } else {
+          // Process different animation types
+          switch (animation.type) {
+            case "highlight":
+            case "compare":
+            case "checking-neighbor":
+            case "evaluate":
+            case "shift":
+            case "update":
+              setHighlightedIndices(animation.indices || [animation.index]);
+              break;
+            case "found":
+              setHighlightedIndices([animation.index]);
+              // Apply a special class for found elements
+              setElements((prev) => {
+                // We don't modify the array, just trigger a re-render with the highlighted index
+                return [...prev];
+              });
+              toast.success(`Found element at index ${animation.index}`, {
+                style: { backgroundColor: "black" },
+                icon: <FaRegLightbulb />,
+              });
+              // Keep the highlighting for 2 seconds
+              await delay(2000);
+              break;
+            case "not-found":
+              setHighlightedIndices([]);
+              toast.error(animation.message, {
+                style: { backgroundColor: "black" },
+                icon: <FaExclamationTriangle />,
+              });
+              break;
+            case "create-node":
+              // Visualization for creating a new node
+              setHighlightedIndices([animation.index]);
+              break;
+            case "update-head":
+            case "update-next":
+              setHighlightedIndices([animation.index]);
+              break;
+            case "push":
+            case "pop":
+            case "peek":
+            case "enqueue":
+            case "dequeue":
+            case "front":
+              if (animation.index !== undefined) {
+                setHighlightedIndices([animation.index]);
+              }
+              break;
+            case "final":
+              if (animation.array) setElements(animation.array);
+              if (animation.list) setElements(animation.list);
+              if (animation.stack) setElements(animation.stack);
+              if (animation.queue) setElements(animation.queue);
+              // Keep final highlighting for 2 seconds
+              await delay(2000);
+              setHighlightedIndices([]);
+              break;
+            case "error":
+              toast.error(animation.message, {
+                style: { backgroundColor: "black" },
+                icon: <FaExclamationTriangle />,
+              });
+              break;
+            default:
+              break;
+          }
         }
 
         // Update the current step and wait for the animation delay
         step++;
         setCurrentStep(step);
-        await delay(speed);
+
+        // Don't delay again if we already delayed for found or final
+        if (animation.type !== "found" && animation.type !== "final") {
+          await delay(speed);
+        }
       }
 
       // Animation complete
@@ -694,25 +738,32 @@ const DataStructuresVisualizer = ({ algorithm, prevAlgorithm }) => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
-                  {elements.map((element, index) => (
-                    <motion.div
-                      key={getElementKey(index, "array")}
-                      className={`array-element ${
-                        highlightedIndices.includes(index) ? "highlighted" : ""
-                      }`}
-                      layout
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{
-                        ...spring,
-                        delay: index * 0.03,
-                      }}
-                    >
-                      <div className="array-value">{element}</div>
-                      <div className="array-index">{index}</div>
-                    </motion.div>
-                  ))}
+                  {elements.map((element, index) => {
+                    const isHighlighted = highlightedIndices.includes(index);
+                    const isFound =
+                      currentAnimation?.type === "found" &&
+                      currentAnimation?.index === index;
+
+                    return (
+                      <motion.div
+                        key={getElementKey(index, "array")}
+                        className={`array-element ${
+                          isHighlighted ? "highlighted" : ""
+                        } ${isFound ? "found" : ""}`}
+                        layout
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{
+                          ...spring,
+                          delay: index * 0.03,
+                        }}
+                      >
+                        <div className="array-value">{element}</div>
+                        <div className="array-index">{index}</div>
+                      </motion.div>
+                    );
+                  })}
                 </motion.div>
               ) : (
                 <motion.div
@@ -748,34 +799,64 @@ const DataStructuresVisualizer = ({ algorithm, prevAlgorithm }) => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
-                  {elements.map((element, index) => (
-                    <motion.div
-                      key={getElementKey(index, "list")}
-                      className="linked-list-node-container"
-                      layout
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 20 }}
-                      transition={{
-                        ...spring,
-                        delay: index * 0.05,
-                      }}
-                    >
-                      <div
-                        className={`linked-list-node ${
-                          highlightedIndices.includes(index)
-                            ? "highlighted"
-                            : ""
-                        }`}
-                        data-position={index}
+                  {elements.map((element, index) => {
+                    // Basic highlighting based on highlightedIndices
+                    const isHighlighted = highlightedIndices.includes(index);
+
+                    // Check if node is found in a search
+                    const isFound =
+                      currentAnimation?.type === "found" &&
+                      currentAnimation?.index === index;
+
+                    // Better detection for currently visiting node
+                    const isVisiting =
+                      // Check if this node is directly referenced in the animation
+                      (currentAnimation &&
+                        (currentAnimation.index === index ||
+                          (currentAnimation.indices &&
+                            currentAnimation.indices.includes(index)))) ||
+                      // Check if node is referenced in the animation's node property
+                      (currentAnimation?.node &&
+                        (currentAnimation.node.index === index ||
+                          currentAnimation.node.position === index ||
+                          currentAnimation.node.row === index ||
+                          currentAnimation.node.col === index)) ||
+                      // For linked list operations
+                      ((currentAnimation?.type === "checking-neighbor" ||
+                        currentAnimation?.type === "compare" ||
+                        currentAnimation?.type === "update" ||
+                        currentAnimation?.type === "insert" ||
+                        currentAnimation?.type === "remove") &&
+                        highlightedIndices.includes(index));
+
+                    return (
+                      <motion.div
+                        key={getElementKey(index, "list")}
+                        className="linked-list-node-container"
+                        layout
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20 }}
+                        transition={{
+                          ...spring,
+                          delay: index * 0.05,
+                        }}
                       >
-                        <div className="node-value">{element}</div>
-                      </div>
-                      {index < elements.length - 1 && (
-                        <div className="node-pointer"></div>
-                      )}
-                    </motion.div>
-                  ))}
+                        <div
+                          className={`linked-list-node 
+                            ${isHighlighted ? "highlighted" : ""} 
+                            ${isFound ? "found" : ""}
+                            ${isVisiting ? "visiting" : ""}`}
+                          data-position={index}
+                        >
+                          <div className="node-value">{element}</div>
+                        </div>
+                        {index < elements.length - 1 && (
+                          <div className="node-pointer"></div>
+                        )}
+                      </motion.div>
+                    );
+                  })}
                 </motion.div>
               ) : (
                 <motion.div

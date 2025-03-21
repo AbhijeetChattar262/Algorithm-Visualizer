@@ -5,6 +5,8 @@
   width: 100%;
   color: white;
   font-family: "Roboto", sans-serif;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 .controls {
@@ -41,6 +43,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .graphCanvas {

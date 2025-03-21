@@ -36,6 +36,22 @@
   align-items: center;
 }
 
+.controlRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.controlGroup {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .button {
   padding: 10px 15px;
   border: none;
@@ -92,9 +108,8 @@
 }
 
 .speedControlWrapper {
-  margin-left: auto;
-  flex: 1;
-  max-width: 300px;
+  margin-left: 10px;
+  min-width: 180px;
 }
 
 .speedControl span {
@@ -173,8 +188,8 @@
 }
 
 .nodeWall {
-  background-color: #333;
-  border: 1px solid #222;
+  background-color: #777;
+  border: 1px solid #555;
   animation: scaleUp 0.2s ease;
 }
 
