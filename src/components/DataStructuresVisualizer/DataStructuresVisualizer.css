@@ -353,6 +353,22 @@
   background-color: #3a3a3a;
 }
 
+.array-element.found {
+  border-color: #4caf50;
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 10px 20px rgba(76, 175, 80, 0.5);
+  z-index: 10;
+}
+
+.array-element.found .array-index {
+  background-color: #4caf50;
+}
+
+.array-element.found .array-value {
+  background-color: rgba(76, 175, 80, 0.2);
+  transition: all 0.5s ease;
+}
+
 /* Linked List Visualization - Enhanced */
 .linked-list-visualization {
   display: flex;
@@ -428,6 +444,44 @@
   bottom: -25px;
   font-size: 12px;
   color: #aaa;
+}
+
+.linked-list-node.found {
+  border-color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.15);
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+  z-index: 10;
+  transition: all 0.5s ease;
+}
+
+.linked-list-node.visiting {
+  border-color: #03a9f4;
+  background-color: rgba(3, 169, 244, 0.2);
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(3, 169, 244, 0.8);
+  z-index: 15;
+  animation: node-pulse 1.5s infinite;
+}
+
+.linked-list-node.visiting .node-value {
+  color: #03a9f4;
+  font-weight: bold;
+}
+
+@keyframes node-pulse {
+  0% {
+    box-shadow: 0 0 10px rgba(3, 169, 244, 0.5);
+    transform: scale(1.1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(3, 169, 244, 0.9);
+    transform: scale(1.2);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(3, 169, 244, 0.5);
+    transform: scale(1.1);
+  }
 }
 
 /* Stack Visualization - Enhanced */
@@ -527,6 +581,18 @@
   }
   100% {
     opacity: 0.7;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px rgba(3, 169, 244, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(3, 169, 244, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(3, 169, 244, 0.5);
   }
 }
 

@@ -14,15 +14,13 @@ const PathfindingVisualizer = ({ algorithm }) => {
   const [mouseIsPressed, setMouseIsPressed] = useState(false);
   const [isSettingStart, setIsSettingStart] = useState(false);
   const [isSettingEnd, setIsSettingEnd] = useState(false);
-  const [isAddingWalls, setIsAddingWalls] = useState(false);
+  const [isAddingWalls, setIsAddingWalls] = useState(true); // Default to wall building mode
   const [messages, setMessages] = useState([]);
   const [speed, setSpeed] = useState(100);
   const [isPaused, setIsPaused] = useState(false);
-  const [visitedNodesInOrder, setVisitedNodesInOrder] = useState([]);
-  const [pathNodesInOrder, setPathNodesInOrder] = useState([]);
-  const [currentNodeIndex, setCurrentNodeIndex] = useState(0);
-  const [currentPathIndex, setCurrentPathIndex] = useState(0);
   const [animationComplete, setAnimationComplete] = useState(false);
+  const [isDraggingStart, setIsDraggingStart] = useState(false);
+  const [isDraggingEnd, setIsDraggingEnd] = useState(false);
 
   const isPausedRef = useRef(isPaused);
   const messageLogRef = useRef(null);
@@ -98,98 +96,140 @@ const PathfindingVisualizer = ({ algorithm }) => {
 
     // Reset visualization states
     setIsVisualizing(false);
-    setVisitedNodesInOrder([]);
-    setPathNodesInOrder([]);
-    setCurrentNodeIndex(0);
-    setCurrentPathIndex(0);
     setAnimationComplete(false);
     setMessages([]);
   };
 
-  // Toggle wall status of a node when clicked
+  // Handle node click or drag actions
   const handleNodeClick = (row, col) => {
     if (isVisualizing) return;
 
+    // If we're starting to drag the start or end node
+    if (grid[row][col].isStart) {
+      setIsDraggingStart(true);
+      return;
+    }
+
+    if (grid[row][col].isEnd) {
+      setIsDraggingEnd(true);
+      return;
+    }
+
+    // Regular node clicking/wall building
+    if (!isDraggingStart && !isDraggingEnd) {
+      if (isSettingStart) {
+        updateStartNode(row, col);
+      } else if (isSettingEnd) {
+        updateEndNode(row, col);
+      } else if (isAddingWalls) {
+        toggleWall(row, col);
+      }
+    }
+  };
+
+  // Update start node position
+  const updateStartNode = (row, col) => {
+    if (grid[row][col].isEnd) return; // Don't set start on end node
+    if (grid[row][col].isWall) return; // Don't set start on wall
+
+    const newGrid = grid.map((gridRow) =>
+      gridRow.map((node) => {
+        if (node.isStart) {
+          return { ...node, isStart: false };
+        }
+        if (node.row === row && node.col === col) {
+          return { ...node, isStart: true };
+        }
+        return node;
+      })
+    );
+
+    setStartNode(newGrid[row][col]);
+    setGrid(newGrid);
     if (isSettingStart) {
-      // Update start node
-      if (grid[row][col].isEnd) return; // Don't set start on end node
-
-      const newGrid = grid.map((gridRow) =>
-        gridRow.map((node) => {
-          if (node.isStart) {
-            return { ...node, isStart: false };
-          }
-          if (node.row === row && node.col === col) {
-            return { ...node, isStart: true };
-          }
-          return node;
-        })
-      );
-
-      setStartNode(newGrid[row][col]);
-      setGrid(newGrid);
       setIsSettingStart(false);
-
       toast.info("Start position updated!", {
         style: { backgroundColor: "black" },
         autoClose: 2000,
       });
-    } else if (isSettingEnd) {
-      // Update end node
-      if (grid[row][col].isStart) return; // Don't set end on start node
+    }
+  };
 
-      const newGrid = grid.map((gridRow) =>
-        gridRow.map((node) => {
-          if (node.isEnd) {
-            return { ...node, isEnd: false };
-          }
-          if (node.row === row && node.col === col) {
-            return { ...node, isEnd: true };
-          }
-          return node;
-        })
-      );
+  // Update end node position
+  const updateEndNode = (row, col) => {
+    if (grid[row][col].isStart) return; // Don't set end on start node
+    if (grid[row][col].isWall) return; // Don't set end on wall
 
-      setEndNode(newGrid[row][col]);
-      setGrid(newGrid);
+    const newGrid = grid.map((gridRow) =>
+      gridRow.map((node) => {
+        if (node.isEnd) {
+          return { ...node, isEnd: false };
+        }
+        if (node.row === row && node.col === col) {
+          return { ...node, isEnd: true };
+        }
+        return node;
+      })
+    );
+
+    setEndNode(newGrid[row][col]);
+    setGrid(newGrid);
+    if (isSettingEnd) {
       setIsSettingEnd(false);
-
       toast.info("End position updated!", {
         style: { backgroundColor: "black" },
         autoClose: 2000,
       });
-    } else if (isAddingWalls) {
-      // Toggle wall status
-      if (grid[row][col].isStart || grid[row][col].isEnd) return;
-
-      const newGrid = [...grid];
-      const node = newGrid[row][col];
-      const newNode = {
-        ...node,
-        isWall: !node.isWall,
-      };
-      newGrid[row][col] = newNode;
-
-      setGrid(newGrid);
     }
   };
 
-  // Handle mouse events for wall drawing
+  // Toggle wall status
+  const toggleWall = (row, col) => {
+    if (grid[row][col].isStart || grid[row][col].isEnd) return;
+
+    const newGrid = [...grid];
+    const node = newGrid[row][col];
+    const newNode = {
+      ...node,
+      isWall: !node.isWall,
+    };
+    newGrid[row][col] = newNode;
+
+    setGrid(newGrid);
+  };
+
+  // Handle mouse events
   const handleMouseDown = (row, col) => {
     if (isVisualizing) return;
     setMouseIsPressed(true);
-    if (!isSettingStart && !isSettingEnd) {
-      handleNodeClick(row, col);
-    }
+    handleNodeClick(row, col);
   };
 
   const handleMouseEnter = (row, col) => {
     if (!mouseIsPressed || isVisualizing) return;
-    handleNodeClick(row, col);
+
+    // Handle dragging start node
+    if (isDraggingStart) {
+      updateStartNode(row, col);
+      return;
+    }
+
+    // Handle dragging end node
+    if (isDraggingEnd) {
+      updateEndNode(row, col);
+      return;
+    }
+
+    // Handle wall toggle while dragging
+    if (isAddingWalls) {
+      toggleWall(row, col);
+    }
   };
 
   const handleMouseUp = () => {
     setMouseIsPressed(false);
+    setIsDraggingStart(false);
+    setIsDraggingEnd(false);
   };
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -214,10 +254,6 @@ const PathfindingVisualizer = ({ algorithm }) => {
 
     setGrid(newGrid);
     setIsVisualizing(true);
-    setVisitedNodesInOrder([]);
-    setPathNodesInOrder([]);
-    setCurrentNodeIndex(0);
-    setCurrentPathIndex(0);
     setAnimationComplete(false);
     setMessages([]);
 
@@ -245,26 +281,6 @@ const PathfindingVisualizer = ({ algorithm }) => {
 
       switch (animation.type) {
         case "evaluating":
-          setGrid((prev) => {
-            const newGrid = [...prev];
-            const node = newGrid[animation.node.row][animation.node.col];
-            newGrid[animation.node.row][animation.node.col] = {
-              ...node,
-              isVisited: true,
-            };
-            return newGrid;
-          });
-          await delay(speed);
-          break;
-
-        case "checking-neighbor":
-          // Visual indication of examining a neighbor
-          break;
-
-        case "update":
-          // Update node with new values
-          break;
-
         case "visited":
           setGrid((prev) => {
             const newGrid = [...prev];
@@ -343,12 +359,8 @@ const PathfindingVisualizer = ({ algorithm }) => {
     );
 
     setGrid(newGrid);
-    setVisitedNodesInOrder([]);
-    setPathNodesInOrder([]);
-    setCurrentNodeIndex(0);
-    setCurrentPathIndex(0);
-    setAnimationComplete(false);
     setMessages([]);
+    setAnimationComplete(false);
   };
 
   const handlePause = () => {
@@ -422,80 +434,81 @@ const PathfindingVisualizer = ({ algorithm }) => {
             </h3>
           </div>
 
-          <div className={styles.algorithmControls}>
-            <button
-              onClick={visualizePathfinding}
-              disabled={isVisualizing}
-              className={`${styles.button} ${styles.visualize}`}
-            >
-              {isVisualizing ? "Visualizing..." : "Visualize"}
-            </button>
+          <div className={styles.controlRow}>
+            <div className={styles.controlGroup}>
+              <button
+                onClick={visualizePathfinding}
+                disabled={isVisualizing}
+                className={`${styles.button} ${styles.visualize}`}
+              >
+                {isVisualizing ? "Visualizing..." : "Visualize"}
+              </button>
 
-            {isVisualizing ? (
-              isPaused ? (
-                <button
-                  onClick={handleResume}
-                  className={`${styles.button} ${styles.resume}`}
-                >
-                  Resume
-                </button>
-              ) : (
-                <button
-                  onClick={handlePause}
-                  className={`${styles.button} ${styles.pause}`}
-                >
-                  Pause
-                </button>
-              )
-            ) : null}
+              {isVisualizing ? (
+                isPaused ? (
+                  <button
+                    onClick={handleResume}
+                    className={`${styles.button} ${styles.resume}`}
+                  >
+                    Resume
+                  </button>
+                ) : (
+                  <button
+                    onClick={handlePause}
+                    className={`${styles.button} ${styles.pause}`}
+                  >
+                    Pause
+                  </button>
+                )
+              ) : null}
 
-            <button
-              onClick={handleClearPath}
-              disabled={isVisualizing}
-              className={`${styles.button} ${styles.clearPath}`}
-            >
-              Clear Path
-            </button>
+              <button
+                onClick={handleClearPath}
+                disabled={isVisualizing}
+                className={`${styles.button} ${styles.clearPath}`}
+              >
+                Clear Path
+              </button>
 
-            <button
-              onClick={handleClearBoard}
-              disabled={isVisualizing}
-              className={`${styles.button} ${styles.clearBoard}`}
-            >
-              Clear Board
-            </button>
-          </div>
+              <button
+                onClick={handleClearBoard}
+                disabled={isVisualizing}
+                className={`${styles.button} ${styles.clearBoard}`}
+              >
+                Clear Board
+              </button>
+              <button
+                onClick={handleSetStart}
+                disabled={isVisualizing}
+                className={`${styles.button} ${
+                  isSettingStart ? styles.active : ""
+                }`}
+              >
+                Set Start
+              </button>
 
-          <div className={styles.gridControls}>
-            <button
-              onClick={handleSetStart}
-              disabled={isVisualizing}
-              className={`${styles.button} ${
-                isSettingStart ? styles.active : ""
-              }`}
-            >
-              Set Start
-            </button>
+              <button
+                onClick={handleSetEnd}
+                disabled={isVisualizing}
+                className={`${styles.button} ${
+                  isSettingEnd ? styles.active : ""
+                }`}
+              >
+                Set End
+              </button>
 
-            <button
-              onClick={handleSetEnd}
-              disabled={isVisualizing}
-              className={`${styles.button} ${
-                isSettingEnd ? styles.active : ""
-              }`}
-            >
-              Set End
-            </button>
+              <button
+                onClick={handleToggleWalls}
+                disabled={isVisualizing}
+                className={`${styles.button} ${
+                  isAddingWalls ? styles.active : ""
+                }`}
+              >
+                {isAddingWalls ? "Drawing Walls" : "Draw Walls"}
+              </button>
 
-            <button
-              onClick={handleToggleWalls}
-              disabled={isVisualizing}
-              className={`${styles.button} ${
-                isAddingWalls ? styles.active : ""
-              }`}
-            >
-              {isAddingWalls ? "Drawing Walls" : "Draw Walls"}
-            </button>
+              <div style={{ marginLeft: "auto" }}></div>
+            </div>
 
             <SpeedControl
               value={510 - speed}
@@ -513,7 +526,11 @@ const PathfindingVisualizer = ({ algorithm }) => {
           <div className={styles.gridContainer}>
             <div
               className={styles.grid}
-              onMouseLeave={() => setMouseIsPressed(false)}
+              onMouseLeave={() => {
+                setMouseIsPressed(false);
+                setIsDraggingStart(false);
+                setIsDraggingEnd(false);
+              }}
             >
               {grid.map((row, rowIdx) => (
                 <div key={rowIdx} className={styles.gridRow}>

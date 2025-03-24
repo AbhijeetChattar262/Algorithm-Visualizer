@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ChevronDown,
   ChevronRight,
@@ -13,7 +13,7 @@ import {
 import { algorithmCategories, subCategories } from "../../constants";
 import styles from "./AlgorithmSidebar.module.css";
 
-const Sidebar = ({ setSelectedAlgorithm }) => {
+const Sidebar = ({ setSelectedAlgorithm, onCollapseChange }) => {
   const [openCategories, setOpenCategories] = useState({});
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -23,6 +23,20 @@ const Sidebar = ({ setSelectedAlgorithm }) => {
       [category]: !prev[category],
     }));
   };
+
+  const toggleCollapse = () => {
+    const newCollapsedState = !isCollapsed;
+    setIsCollapsed(newCollapsedState);
+    if (onCollapseChange) {
+      onCollapseChange(newCollapsedState);
+    }
+  };
+
+  useEffect(() => {
+    if (onCollapseChange) {
+      onCollapseChange(isCollapsed);
+    }
+  }, []);
 
   const getCategoryIcon = (categoryTitle) => {
     switch (categoryTitle) {
@@ -48,10 +62,7 @@ const Sidebar = ({ setSelectedAlgorithm }) => {
         {!isCollapsed && (
           <div className={styles.sidebarTitle}>Algorithm Hub</div>
         )}
-        <button
-          className={styles.collapseToggle}
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
+        <button className={styles.collapseToggle} onClick={toggleCollapse}>
           {isCollapsed ? <Menu size={24} /> : <X size={24} />}
         </button>
       </div>
