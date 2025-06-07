@@ -27,7 +27,7 @@ export const subCategories = {
   searching_algorithms: ["Linear Search", "Binary Search"],
   graph_algorithms: ["Graph BFS", "Graph DFS", "Graph Dijkstra"],
   data_structures: ["Array", "Linked List", "Stack", "Queue"],
-  pathfinding_algorithms: ["A*", "Dijkstra"],
+  pathfinding_algorithms: ["A*"],
 };
 
 export const infoSection = {
