@@ -8,6 +8,8 @@
   transition: all 0.3s ease;
   overflow: auto;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1000; /* Increased from 100 to ensure it's above everything */
 }
 
 .sidebar {
@@ -57,6 +59,48 @@
 .collapsed .categoryButton {
   justify-content: center;
   padding: 8px;
+  position: relative;
+  z-index: 1000; /* Ensure proper stacking context */
+}
+
+.collapsed .categoryButton .tooltipText {
+  visibility: hidden;
+  background-color: #1a1a1a;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px;
+  position: fixed;
+  z-index: 10000;
+  left: 100%;
+  top: 10px;
+  transform: translateY(-29%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.collapsed .categoryButton:hover .tooltipText {
+  visibility: visible;
+  opacity: 1;
+}
+
+.collapsed .categoryButton .tooltipText::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #333 transparent transparent;
+}
+
+.collapsed .categoryButton {
+  overflow: visible;
 }
 
 .sidebarTitle {
@@ -73,6 +117,9 @@
 .collapsed .categoryContainer {
   display: flex;
   justify-content: center;
+  overflow: visible;
+  position: relative; /* Ensure proper stacking context */
+  z-index: 1000; /* Ensure proper stacking context */
 }
 
 .categoryButton {

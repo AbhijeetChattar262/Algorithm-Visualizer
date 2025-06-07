@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { motion } from "framer-motion";
+import { motion, LayoutGroup } from "framer-motion";
 import styles from "./Visualization.module.css";
 import algorithms from "../../../algorithms/sorting";
 import SpeedControl from "../../UI/SpeedControl/SpeedControl";
@@ -49,6 +49,10 @@ const Visualization = ({ algorithm }) => {
     setSwapping([]);
     setCurrentStep(0);
     setMessageLog([]);
+    setSorted([]); // Clear sorted state
+    setSubarray([]); // Clear subarray state
+    setPartition([]); // Clear partition state
+    setPivot([]); // Clear pivot state
   };
 
   useEffect(() => {
@@ -81,95 +85,7 @@ const Visualization = ({ algorithm }) => {
         return newLog;
       });
 
-      if (type === "pivot") {
-        setPivot(indices);
-        await delay(animationSpeed);
-      } else if (type === "compare") {
-        setPivot([]);
-        setComparing(indices);
-        await delay(animationSpeed);
-        setComparing([]);
-      } else if (type === "swap") {
-        setPivot([]);
-        setSwapping(indices);
-        [newArray[indices[0]], newArray[indices[1]]] = [
-          newArray[indices[1]],
-          newArray[indices[0]],
-        ];
-        setArray(newArray);
-        await delay(animationSpeed);
-        setSwapping([]);
-      } else if (type === "sorted") {
-        setSorted(indices);
-        await delay(animationSpeed);
-        setSorted([]);
-      } else if (type === "subarray") {
-        setSubarray(indices);
-        await delay(animationSpeed);
-        setSubarray([]);
-      } else if (type === "partition") {
-        setPartition(indices);
-        await delay(animationSpeed);
-        setPartition([]);
-      }
-      setCurrentStep((prev) => prev + 1);
-      currentStepRef.current += 1; // Ensure the ref is updated
-      scrollToBottom();
-    }
-
-    if (currentStepRef.current >= animations.length) {
-      setIsSorting(false);
-      setMessageLog((prevLog) => {
-        const newLog = [...prevLog, "✅ Sorting completed!"];
-        return newLog;
-      });
-      toast.success(
-        "Sorting completed! Please generate new array to begin visualization",
-        {
-          position: "top-right",
-          autoClose: 5000,
-          style: { backgroundColor: "black" },
-        }
-      );
-    }
-  };
-
-  const handleSort = () => {
-    setIsSorting(true);
-    setIsPaused(false);
-    setCurrentStep(0);
-    const sortingAlgorithm = algorithms[algorithm];
-    const moves = sortingAlgorithm(array);
-    setAnimations(moves);
-  };
-
-  const handlePause = () => {
-    setIsPaused(true);
-  };
-
-  const handleResume = () => {
-    setIsPaused(false);
-  };
-
-  const handleReset = () => {
-    // Clear all states
-    setIsSorting(false);
-    setIsPaused(false);
-    setComparing([]);
-    setSwapping([]);
-    setCurrentStep(0);
-    setAnimations([]);
-    generateArray();
-    setMessageLog([]);
-    setPivot([]); // Clear pivot state
-  };
-
-  const handleStep = async () => {
-    if (currentStep < animations.length) {
-      const { indices, type, message } = animations[currentStep];
-      const newArray = [...array];
-
-      // Reset all visual states at the start of each step
+      // Reset all visual states at the beginning of each animation step
       setPivot([]);
       setComparing([]);
       setSwapping([]);
@@ -200,6 +116,121 @@ const Visualization = ({ algorithm }) => {
       } else if (type === "partition") {
         setPartition(indices);
         await delay(animationSpeed);
+      }
+
+      setCurrentStep((prev) => prev + 1);
+      currentStepRef.current += 1; // Ensure the ref is updated
+      scrollToBottom();
+    }
+
+    if (currentStepRef.current >= animations.length) {
+      setIsSorting(false);
+      // Reset all visual states at the end of animation
+      setPivot([]);
+      setComparing([]);
+      setSwapping([]);
+      setSorted([]);
+      setSubarray([]);
+      setPartition([]);
+
+      setMessageLog((prevLog) => {
+        const newLog = [...prevLog, "✅ Sorting completed!"];
+        return newLog;
+      });
+      toast.success(
+        "Sorting completed! Please generate new array to begin visualization",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          style: { backgroundColor: "black" },
+        }
+      );
+    }
+  };
+
+  const handleSort = () => {
+    setIsSorting(true);
+    setIsPaused(false);
+    setCurrentStep(0);
+    // Reset all visual states at the beginning of sorting
+    setPivot([]);
+    setComparing([]);
+    setSwapping([]);
+    setSorted([]);
+    setSubarray([]);
+    setPartition([]);
+
+    const sortingAlgorithm = algorithms[algorithm];
+    const moves = sortingAlgorithm(array);
+    setAnimations(moves);
+  };
+
+  const handlePause = () => {
+    setIsPaused(true);
+  };
+
+  const handleResume = () => {
+    setIsPaused(false);
+  };
+
+  const handleReset = () => {
+    // Clear all states
+    setIsSorting(false);
+    setIsPaused(false);
+    setComparing([]);
+    setSwapping([]);
+    setCurrentStep(0);
+    setAnimations([]);
+    generateArray();
+    setMessageLog([]);
+    setPivot([]); // Clear pivot state
+    setSorted([]); // Clear sorted state
+    setSubarray([]); // Clear subarray state
+    setPartition([]); // Clear partition state
+  };
+
+  const handleStep = async () => {
+    if (currentStep < animations.length) {
+      const { indices, type, message } = animations[currentStep];
+      const newArray = [...array];
+
+      // Reset all visual states at the start of each step
+      setPivot([]);
+      setComparing([]);
+      setSwapping([]);
+      setSorted([]);
+      setSubarray([]);
+      setPartition([]);
+
+      if (type === "pivot") {
+        setPivot(indices);
+        await delay(animationSpeed);
+        setPivot([]); // Clear pivot after animation
+      } else if (type === "compare") {
+        setComparing(indices);
+        await delay(animationSpeed);
+        setComparing([]); // Clear comparing after animation
+      } else if (type === "swap") {
+        setSwapping(indices);
+        [newArray[indices[0]], newArray[indices[1]]] = [
+          newArray[indices[1]],
+          newArray[indices[0]],
+        ];
+        setArray(newArray);
+        await delay(animationSpeed);
+        setSwapping([]); // Clear swapping after animation
+      } else if (type === "sorted") {
+        setSorted(indices);
+        await delay(animationSpeed);
+        setSorted([]); // Clear sorted after animation
+      } else if (type === "subarray") {
+        setSubarray(indices);
+        await delay(animationSpeed);
+        setSubarray([]); // Clear subarray after animation
+      } else if (type === "partition") {
+        setPartition(indices);
+        await delay(animationSpeed);
+        setPartition([]); // Clear partition after animation
       }
 
       setMessageLog((prevLog) => {
@@ -250,106 +281,109 @@ const Visualization = ({ algorithm }) => {
 
   return (
     <VisualizationContainer title="Sorting Visualization">
-      <motion.div
-        className={styles.visualizationContainer}
-        layout
-        transition={spring}
-      >
-        <div className={styles.visualizationContent}>
-          <motion.div
-            className={styles.arrayContainer}
-            layout
-            transition={spring}
-          >
-            {array.map((item, idx) => (
-              <motion.div
-                key={item.id}
-                layout
-                transition={spring}
-                className={getBarClassName(idx)}
-                style={{ height: `${item.value}%` }}
-              >
-                <div className={styles.barLabel}>{item.value}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <motion.div
-            className={styles.messageLogContainer}
-            layout
-            transition={spring}
-          >
-            <h4 className={styles.messageLogHeader}>Algorithm Steps</h4>
-            <div className={styles.messageLog} ref={messageLogRef}>
-              {messageLog.map((msg, index) => (
-                <div key={index} className={styles.logEntry}>
-                  Step {index + 1} : {msg}
-                </div>
+      <LayoutGroup>
+        <motion.div
+          className={styles.visualizationContainer}
+          layout
+          transition={spring}
+        >
+          <div className={styles.visualizationContent}>
+            <motion.div
+              className={styles.arrayContainer}
+              layout
+              transition={spring}
+            >
+              {array.map((item, idx) => (
+                <motion.div
+                  key={item.id}
+                  layoutId={`bar-${item.id}`}
+                  layout
+                  transition={spring}
+                  className={getBarClassName(idx)}
+                  style={{ height: `${item.value}%` }}
+                >
+                  <div className={styles.barLabel}>{item.value}</div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
+
+            <motion.div
+              className={styles.messageLogContainer}
+              layout
+              transition={spring}
+            >
+              <h4 className={styles.messageLogHeader}>Algorithm Steps</h4>
+              <div className={styles.messageLog} ref={messageLogRef}>
+                {messageLog.map((msg, index) => (
+                  <div key={index} className={styles.logEntry}>
+                    Step {index + 1} : {msg}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Controls moved below the visualization content */}
+          <motion.div className={styles.controls} layout transition={spring}>
+            <button
+              onClick={generateArray}
+              disabled={isSorting && !isPaused}
+              className={`${styles.button} ${styles.generate}`}
+            >
+              Generate New Array
+            </button>
+            <button
+              onClick={handleSort}
+              disabled={isSorting}
+              className={`${styles.button} ${styles.sort}`}
+            >
+              Start Sort
+            </button>
+            <button
+              onClick={handlePause}
+              disabled={!isSorting || isPaused}
+              className={`${styles.button} ${styles.pause}`}
+            >
+              Pause
+            </button>
+            <button
+              onClick={handleResume}
+              disabled={!isSorting || !isPaused}
+              className={`${styles.button} ${styles.resume}`}
+            >
+              Resume
+            </button>
+            <button
+              onClick={handleReset}
+              disabled={isSorting && !isPaused}
+              className={`${styles.button} ${styles.reset}`}
+            >
+              Reset
+            </button>
+            <button
+              onClick={handleStep}
+              disabled={
+                (isSorting && !isPaused) || currentStep >= animations.length
+              }
+              className={`${styles.button} ${styles.step}`}
+            >
+              Step
+            </button>
           </motion.div>
-        </div>
 
-        {/* Controls moved below the visualization content */}
-        <motion.div className={styles.controls} layout transition={spring}>
-          <button
-            onClick={generateArray}
+          <SpeedControl
+            value={1500 - animationSpeed}
+            onChange={(value) => setAnimationSpeed(1500 - value)}
+            min={0}
+            max={1400}
             disabled={isSorting && !isPaused}
-            className={`${styles.button} ${styles.generate}`}
-          >
-            Generate New Array
-          </button>
-          <button
-            onClick={handleSort}
-            disabled={isSorting}
-            className={`${styles.button} ${styles.sort}`}
-          >
-            Start Sort
-          </button>
-          <button
-            onClick={handlePause}
-            disabled={!isSorting || isPaused}
-            className={`${styles.button} ${styles.pause}`}
-          >
-            Pause
-          </button>
-          <button
-            onClick={handleResume}
-            disabled={!isSorting || !isPaused}
-            className={`${styles.button} ${styles.resume}`}
-          >
-            Resume
-          </button>
-          <button
-            onClick={handleReset}
-            disabled={isSorting && !isPaused}
-            className={`${styles.button} ${styles.reset}`}
-          >
-            Reset
-          </button>
-          <button
-            onClick={handleStep}
-            disabled={
-              (isSorting && !isPaused) || currentStep >= animations.length
-            }
-            className={`${styles.button} ${styles.step}`}
-          >
-            Step
-          </button>
+            isReversed={false}
+            className={styles.speedControlWrapper}
+          />
+
+          <ToastContainer />
         </motion.div>
-
-        <SpeedControl
-          value={1500 - animationSpeed}
-          onChange={(value) => setAnimationSpeed(1500 - value)}
-          min={0}
-          max={1400}
-          disabled={isSorting && !isPaused}
-          isReversed={false}
-          className={styles.speedControlWrapper}
-        />
-
-        <ToastContainer />
-      </motion.div>
+      </LayoutGroup>
     </VisualizationContainer>
   );
 };
