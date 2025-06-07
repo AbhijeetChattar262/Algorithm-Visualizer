@@ -5,6 +5,8 @@
   background-color: #1f2b37e6;
   padding: 5px;
   width: 100%;
+  position: relative;
+  z-index: 10; /* Lower than sidebar z-index */
 }
 
 .algoHero {
@@ -16,6 +18,8 @@
   overflow-y: auto;
   overflow-x: hidden;
   transition: all 0.3s ease-in-out;
+  position: relative;
+  z-index: 10; /* Lower than sidebar z-index */
 }
 
 .algoHero::-webkit-scrollbar {

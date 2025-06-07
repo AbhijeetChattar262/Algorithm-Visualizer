@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   ChevronDown,
   ChevronRight,
@@ -17,11 +17,54 @@ const Sidebar = ({ setSelectedAlgorithm, onCollapseChange }) => {
   const [openCategories, setOpenCategories] = useState({});
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  // Add a state for tracking the position of each category button
+  const [tooltipPositions, setTooltipPositions] = useState({});
+  const categoryRefs = useRef({});
+
+  // Update tooltip positions when the sidebar collapses/expands
+  useEffect(() => {
+    if (isCollapsed) {
+      // Update positions after a brief delay to allow for DOM updates
+      setTimeout(updateTooltipPositions, 100);
+    }
+  }, [isCollapsed]);
+
+  // Function to update tooltip positions
+  const updateTooltipPositions = () => {
+    const positions = {};
+    Object.keys(categoryRefs.current).forEach((title) => {
+      const buttonRef = categoryRefs.current[title];
+      if (buttonRef) {
+        const rect = buttonRef.getBoundingClientRect();
+        positions[title] = {
+          top: rect.top + rect.height / 2,
+          left: rect.right + 10,
+        };
+      }
+    });
+    setTooltipPositions(positions);
+  };
+
   const toggleCategory = (category) => {
-    setOpenCategories((prev) => ({
-      ...prev,
-      [category]: !prev[category],
-    }));
+    // If sidebar is collapsed, expand it first
+    if (isCollapsed) {
+      setIsCollapsed(false);
+      if (onCollapseChange) {
+        onCollapseChange(false);
+      }
+      // Set a small timeout to allow the sidebar to expand before opening the category
+      setTimeout(() => {
+        setOpenCategories((prev) => ({
+          ...prev,
+          [category]: true,
+        }));
+      }, 100);
+    } else {
+      setOpenCategories((prev) => ({
+        ...prev,
+        [category]: !prev[category],
+      }));
+    }
   };
 
   const toggleCollapse = () => {
@@ -53,6 +96,19 @@ const Sidebar = ({ setSelectedAlgorithm, onCollapseChange }) => {
     }
   };
 
+  const selectAlgorithm = (algorithm) => {
+    // If sidebar is collapsed, expand it first
+    if (isCollapsed) {
+      setIsCollapsed(false);
+      if (onCollapseChange) {
+        onCollapseChange(false);
+      }
+    }
+    const formattedAlgorithm = algorithm.toLowerCase().replace(/ /g, "_");
+    setSelectedAlgorithm(formattedAlgorithm);
+    console.log("Selected Algorithm:", formattedAlgorithm);
+  };
+
   return (
     <div
       className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""}`}
@@ -70,13 +126,27 @@ const Sidebar = ({ setSelectedAlgorithm, onCollapseChange }) => {
         {algorithmCategories.map(({ title }) => (
           <div key={title} className={styles.categoryContainer}>
             <button
+              ref={(el) => (categoryRefs.current[title] = el)}
               onClick={() => toggleCategory(title)}
               className={styles.categoryButton}
+              aria-label={title}
             >
               <div className={styles.categoryLabel}>
                 {getCategoryIcon(title)}
                 {!isCollapsed && <span>{title}</span>}
               </div>
+              {isCollapsed && tooltipPositions[title] && (
+                <span
+                  className={styles.tooltipText}
+                  style={{
+                    top: `${tooltipPositions[title].top}px`,
+                    left: `${tooltipPositions[title].left}px`,
+                    position: "fixed",
+                  }}
+                >
+                  {title}
+                </span>
+              )}
               {!isCollapsed &&
                 (openCategories[title] ? (
                   <ChevronDown className={styles.chevronIcon} />
@@ -93,16 +163,7 @@ const Sidebar = ({ setSelectedAlgorithm, onCollapseChange }) => {
                       <button
                         key={item}
                         className={styles.algorithmItem}
-                        onClick={() => {
-                          const formattedAlgorithm = item
-                            .toLowerCase()
-                            .replace(/ /g, "_");
-                          setSelectedAlgorithm(formattedAlgorithm);
-                          console.log(
-                            "Selected Algorithm:",
-                            formattedAlgorithm
-                          );
-                        }}
+                        onClick={() => selectAlgorithm(item)}
                       >
                         {item}
                       </button>
