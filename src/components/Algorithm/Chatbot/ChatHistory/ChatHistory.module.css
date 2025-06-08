@@ -45,7 +45,7 @@
 
 .chatBubble.bot {
   align-self: flex-start;
-  background-color: #4ba600;
+  background-color: #2b1b1b60;
   color: #ffffff;
   border-bottom-left-radius: 3px;
   max-width: 95%; /* Increased to better accommodate code blocks */
