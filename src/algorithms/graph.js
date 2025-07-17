@@ -12,7 +12,7 @@ const graph_bfs = (nodes, edges, startNode) => {
     visitedList: Array.from(visited),
   });
 
-  while (queue.length > 0) {
+  while (queue.length > 0) { 
     const current = queue.shift();
 
     if (!visited.has(current)) {
